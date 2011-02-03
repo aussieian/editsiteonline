@@ -48,7 +48,7 @@ else {
 		$content = get_domain_content($domain);
 		if ($content == "%default%") {
 			include("html/new_domain.html");
-		} elseif (strpos($content, "clone:") == 0) {
+		} elseif (strpos($content, "clone:") === 0) {
 			// clone domain 
 			$clone_domain = trim(substr($content, 6));
 			if (domain_exists($clone_domain)) {
