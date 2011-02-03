@@ -77,4 +77,17 @@ function get_recent_yoodoos_domains($limit)
 	return $recent_domains;
 }
 
+function get_hidden_domains($limit)
+{
+	// show the page for the domain
+	$SQL = "select domain from sites where content not like '\%default\%' and public_mode = 0 order by id desc limit ".$limit.";";
+	$result = mysql_query($SQL);
+	$recent_domains = array();
+	while ($row = mysql_fetch_assoc($result)) {
+		$recent_domains[] = $row['domain']; 
+	}
+	return $recent_domains;
+}
+
+
 ?>

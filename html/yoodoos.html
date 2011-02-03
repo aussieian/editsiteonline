@@ -40,6 +40,25 @@
 	</ul>
 	</td>
 	</tr>
+	<?php
+	if (array_key_exists("hidden", $_GET))
+	{
+	?>
+		<tr>
+		<td colspan="2">
+		<span style="font-size: 16pt;">Hidden</span>
+		<ul class="intro">
+		<?php
+		foreach (get_hidden_domains(100) as $domain) { 
+			print('<li class="intro"><a href="http://'.$domain.'" target="_blank">'.$domain.'</a> (hidden)');
+		}
+		?>
+		</ul>
+		</td>
+		</tr>
+	<?php
+	}
+	?>
 	</table>
 </div>
 
