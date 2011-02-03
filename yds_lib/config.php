@@ -5,8 +5,8 @@ error_reporting(E_ERROR);
 
 // db config
 $username = "root";
-//$password = "root";
-$password = "coluzzi";
+$password = "root";
+//$password = "coluzzi";
 $hostname = "localhost";	
 $dbname = 'yoodoos';
 

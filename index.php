@@ -48,7 +48,17 @@ else {
 		$content = get_domain_content($domain);
 		if ($content == "%default%") {
 			include("html/new_domain.html");
-		} else {
+		} elseif (strpos($content, "clone:") == 0) {
+			// clone domain 
+			$clone_domain = trim(substr($content, 6));
+			if (domain_exists($clone_domain)) {
+				$clone_content = get_domain_content($clone_domain);
+				print($clone_content);
+			} else {
+				print("Oops, can't clone domain '" . $clone_domain . "' (not hosted on Yoodoos) <a href='/edit'>Edit page</a>");
+			}
+		}
+		else {
 			print($content);
 		}
 	}
