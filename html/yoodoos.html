@@ -1,0 +1,66 @@
+<html>
+<head>
+	<title>Yoodoos.com - One Page Domain Hosting</title>
+    <link type='text/css' href='/yds_stylesheet.css' rel='stylesheet' />
+</head>
+<body>
+	
+<div id="header">
+	<span class="orange">&nbsp;Yoodoos<span style="font-size: 12pt;">.com&nbsp;<br></span></span>
+	<span style="font-size: 12pt;">One Page Domain via DNS CNAME</span><br>
+</div>
+
+<div id="intro">
+	Hi.<br><br>Yoodoos is a <span style="color: yellow;">free</span> service to host a  <span style="color: yellow;">single page</span> on your domain or sub-domain.
+    <br><br><span style="font-size: 16pt;">We just host <span style="color: yellow;">a single, editable HTML file</span> for your domain and nothing else.</span>
+	<br><br><span style="font-size: 13pt;">How do I set it up?
+	<br>Just point your CNAME to <span style="color: #444;">hostme.yoodoos.com</span> or root A record to <span style="color: #444;">184.72.55.6</span>
+	<br><br>Don't have a domain name?
+	<br>Make your own sub-domain by typing <span style="color: #444;"><i>your-name</i>.yoodoos.com</span> <span style="font-size: smaller;">(ie: surfing.yoodos.com)</span> into your browser address bar.
+	<br><br>How do I edit my page?<br>Once you've updated your DNS entries, just visit your address and append "/edit" to the URL. To keep the riff-raff out, you'll be asked to choose a secret key to save any changes.
+	<div style="border-bottom: 1px solid #fff; padding-top: 15px; margin-bottom: 15px;"></div>
+	<span style="font-size: 16pt;">Recently added</span>
+	<table width="100%;" border="0" style="padding-top: 10px;">
+	<tr>
+	<td valign="top">
+	<ul class="intro" >
+	<?php
+	foreach (get_recent_domains(10) as $domain) { 
+		print('<li class="intro"><a href="http://'.$domain.'" target="_blank">'.$domain.'</a>');
+	}
+	?>
+	</td>
+	<td valign="top">
+	<ul class="intro">
+	<?php
+	foreach (get_recent_yoodoos_domains(10) as $domain) { 
+		print('<li class="intro"><a href="http://'.$domain.'" target="_blank">'.$domain.'</a>');
+	}
+	?>
+	</ul>
+	</td>
+	</tr>
+	</table>
+</div>
+
+<div id="footer">
+	Created by <a href="http://twitter.com/aussie_ian">@aussie_ian</a> If you like this then tell me!
+</div>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-19016233-1']);
+  _gaq.push(['_setDomainName', '.yoodoos.com']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+</body>
+</html>
