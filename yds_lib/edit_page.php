@@ -33,7 +33,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 	
 	// check it's not default
 	if ($content == "%default%") {
-		$content = file_get_contents("../html/new_domain.html");
+		$content = file_get_contents("html/new_domain.html");
 	}
 	
 	// set stealth mode
