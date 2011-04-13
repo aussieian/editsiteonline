@@ -19,12 +19,25 @@ a { color: #3b5998;}
 	
 #newdomain, #editdomain { 
 	font-size: 18pt; 
-	width: 600px;
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
 	padding-top: 20px;
 	padding-bottom: 20px;
+}
+
+#newdomain_page {
+	width: 650px;
+	margin-left: auto;
+	margin-right: auto;
+	-moz-border-radius: 25px;
+	border-radius: 25px;
+	padding-left: 40px;
+	padding-right: 40px;
+	padding-bottom: 20px;
+	background-color: #46ad4d;
+	border: 8px dotted orange;
+	margin-bottom: 12px;
 }
 
 #welcome { 
@@ -45,6 +58,14 @@ a { color: #3b5998;}
 	text-align: left;
 	padding-top: 20px;
 	padding-bottom: 10px;
+	-moz-border-radius: 25px;
+	border-radius: 25px;
+	padding-left: 40px;
+	padding-right: 40px;
+	padding-bottom: 20px;
+	background-color: #46ad4d;
+	border: 8px dotted orange;
+	margin-bottom: 12px;
 }
 
 #footer { 
@@ -54,7 +75,7 @@ a { color: #3b5998;}
 	margin-right: auto;
 	text-align: left;
 	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-bottom: 22px;
 }
 
 ul .intro { margin-top: 0px; font-size: 12pt;}

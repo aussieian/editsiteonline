@@ -15,7 +15,7 @@ if (($secret_key == "") || (!(check_email_address($owner_email))))
 <?php include("html/head.html");?>
 <body>
 <?php include("html/header.html");?>
-	<div id="newdomain">
+	<div id="newdomain_page">
 <form id='newdomain' method='POST'>
 	<div id="newdomainform">
 		<div style="padding-bottom: 35px; font-size: 22pt;">Congrats, you've pointed your domain here.</div>

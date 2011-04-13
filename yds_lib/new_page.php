@@ -11,12 +11,12 @@ if (( $real_key != $secret_key))
 <?php include("html/head.html");?>
 <body>
 <?php include("html/header.html");?>
-	<div id="newdomain">
+	<div id="newdomain_page">
 <form id='newdomain' method='POST'>
 	<div id="newdomainform">
-		<div style="padding-bottom: 35px; font-size: 22pt;">Edit your page.</div>
+		<div style="padding-bottom: 35px; font-size: 22pt;">Create your page.</div>
 		<div style="padding-left: 50px; clear: both;"><div style="float: left; width: 7em; text-align: left;">Page URL</div><div style="float: left; text-align: left;"><a href="http://<?php print($domain.$page);?>"><?php print($domain.$page);?></a><br><span style="font-size: 10pt;">The URL of this page</span></div></div>
-		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Secret key</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='secret_key' value="<?php print($secret_key);?>"><br><span style="font-size: 10pt;"><?php if (($real_key != $secret_key) && ($_POST["content"] != "")) { print ("<span style='color: yellow'>Wrong key!</span>"); } else { print("Enter your secret key."); } ?></span><br></div></div>
+		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Secret key</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='secret_key' value="<?php print($secret_key);?>"><br><span style="font-size: 10pt;"><?php if (($real_key != $secret_key) && ($_POST["content"] != "")) { print ("<span style='color: yellow'>Wrong key!</span> (<a style='color: yellow' href='/edit/forgot_key'>email key to domain owner</a>)</span>"); } else { print("Enter your secret key."); } ?></span><br></div></div>
 		<div style="clear: both; padding-top: 15px; text-align: left;">Page HTML<br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
 		</div>

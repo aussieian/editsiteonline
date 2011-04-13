@@ -11,7 +11,7 @@ mysql_select_db($dbname);
 // domain
 $domain = strtolower($_SERVER["HTTP_HOST"]);
 $request_uri_parts = explode("?", $_SERVER["REQUEST_URI"]);
-$page = strtolower(preg_replace("/\/edit$/i", "", $request_uri_parts[0])); // ie: /foobar/edit?id=1 will return /foobar
+$page = strtolower(preg_replace("/\/edit.*?$/i", "", $request_uri_parts[0])); // ie: /foobar/edit?id=1 will return /foobar
 if ($page == "") { $page = "/"; } // rewrite root page to /
 
 // see if domain exists yet
@@ -43,6 +43,9 @@ if (( $real_key != $secret_key) || ($content == ""))
 	
 	// show the form for the secret key and content
 ?>
+
+<div id="newdomain_page">
+	
 <form id='editdomain' method='POST'>
 
 	<div id="editdomainform">
@@ -81,8 +84,9 @@ if (( $real_key != $secret_key) || ($content == ""))
 	<div id='domainstats'>
 		Page views: <?php print(get_view_count($domain, $page));?>
 	</div>
+</div>
 	
-	<div id="footer" style="padding-top: 40px;">
+	<div id="footer" style="padding-top: 20px;">
 		Created by <a href="http://twitter.com/aussie_ian">@aussie_ian</a> at <a href="http://www.insight4.com">Insight4 Labs</a> If you like this then let me know!
 	</div>
 

@@ -92,7 +92,7 @@ function servePage($domain, $page)
 	}
 	
 	// check if its an edit page
-	if (preg_match("/\/edit$/i", $page))
+	if ((preg_match("/\/edit$/i", $page)) || (preg_match("/\/edit\/$/i", $page)))
 	{
 		include("yds_lib/edit_page.php");
 		return;
