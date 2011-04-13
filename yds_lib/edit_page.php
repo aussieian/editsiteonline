@@ -26,7 +26,6 @@ $stealth = stripslashes($_POST["stealth"]);
 $real_key = get_domain_key($domain);
 if (( $real_key != $secret_key) || ($content == ""))
 {
-	
 	// get the content if it was set to empty
 	if ($content == "") {
 		$content = get_page_content($domain, $page);
@@ -47,25 +46,40 @@ if (( $real_key != $secret_key) || ($content == ""))
 <form id='editdomain' method='POST'>
 
 	<div id="editdomainform">
-		<div style="clear: both;"><div style="float: left; width: 7em; text-align: left;">Your page</div><div style="float: left; text-align: left;"><a href="http://<?php print($domain);?>"><?php print($domain);?></a></div></div>
-		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Secret key</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='secret_key' value="<?php print($secret_key);?>"><br><span style="font-size: 10pt;"><?php if (($real_key != $secret_key) && ($_POST["content"] != "")) { print ("<span style='color: yellow'>Wrong key!</span>"); } else { print("Enter your secret key."); } ?></span></div></div>
+		<div style="clear: both;"><div style="float: left; width: 7em; text-align: left;">Your page</div><div style="float: left; text-align: left;"><a href="http://<?php print($domain.$page);?>"><?php print($domain.$page);?></a></div></div>
+		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Secret key</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='secret_key' value="<?php print($secret_key);?>"><br><span style="font-size: 10pt;"><?php if (($real_key != $secret_key) && ($_POST["content"] != "")) { print ("<span style='color: yellow'>Wrong key! (<a style='color: yellow' href='/edit/forgot_key'>email key to domain owner</a>)</span>"); } else { print("Enter your secret key."); } ?></span></div></div>
 		<?php
 		// only show stealth for pages
 		if ($domain == "/") {
 		?>
 		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">&nbsp;</div><div style="float: left; text-align: left; width: 280px;"><input type='checkbox' name='stealth' value='yes' <?php if ($stealth == "yes") { print("checked"); } ?>><span style="font-size: 10pt;">Stealth mode. Hide from public listing.</span></div></div>
 		<?php } // end if ?>
-		<div style="clear: both; padding-top: 15px; text-align: left;">Edit HTML<br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
+		<div style="clear: both; padding-top: 15px; text-align: left;">Edit HTML <span style="font-size: 10pt;"><?php if (get_page_backup($domain, $page) != "") { ?><a style="color: yellow;" href="http://<?php print($domain.$page."/backup");?>">previous version</a></span><? } ?><br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
-		Tips:
+		Special commands:
 		<ul style="margin-top: 0.5em;">
-			<li>To clone a Yoodoos hosted domain use: "clone:domainname".
+			<li>#YOODOOS_CLONE:domainname# - clone a Yoodoos hosted domain
+			<li>#YOODOOS_PAGE:/page_url# - insert the contents of a page (useful for templates)
 		</ul>
 		</div>
 		<div style="clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt;" value='save page &raquo;' class="button orange"></div>
 	</div>
-		
 </form>
+
+	<div id='domainpages'>
+	<h2>Pages on this domain</h2>
+	<ul>
+<?php
+	foreach (get_domain_pages($domain) as $page) {
+?>
+	<li><a href="http://<?php print($domain.$page);?>"><?php print($domain.$page);?></a> <span style='font-size: smaller;'><a style='color: yellow;' href="http://<?php print(str_replace("//", "/", ($domain.$page."/edit")));?>">edit</a></span>
+<?
+	}
+?>
+	<li><?php print($domain);?>/<input style='font-size: 12pt;' type='text' id='new_page' name='new_page'> <button class="button orange" OnClick="window.location.href = '/' + document.getElementById('new_page').value;">create page</button>
+	</ul>
+	</div>
+
 <?php
 } // end if
 else {

@@ -2,12 +2,14 @@
 
 $secret_key = $_POST["secret_key"];
 $owner_email = $_POST["owner_email"];
-if (($secret_key == "") || ($owner_email == ""))
+
+if (($secret_key == "") || (!(check_email_address($owner_email))))
 {
 	// show the form for the secret key and email
 	if ($secret_key == "") { 
-		$secret_key = "apple";
+		$secret_key = make_random_string();
 	}
+	
 ?>
 <html>
 <?php include("html/head.html");?>
@@ -18,8 +20,8 @@ if (($secret_key == "") || ($owner_email == ""))
 	<div id="newdomainform">
 		<div style="padding-bottom: 35px; font-size: 22pt;">Congrats, you've pointed your domain here.</div>
 		<div style="padding-left: 50px; clear: both;"><div style="float: left; width: 7em; text-align: left;">Domain name</div><div style="float: left; text-align: left;"><a href="http://<?php print($domain);?>"><?php print($domain);?></a><br><span style="font-size: 10pt;">This domain name of this page</span></div></div>
-		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Secret key</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='secret_key' value="<?php print($secret_key);?>"><br><span style="font-size: 10pt;">Secret key to edit your page.<br>This is plaintext, so keep it simple!</span></div></div>
-		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Email</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='owner_email' value="<?php print($owner_email);?>"><br><span style="font-size: 10pt;">If you forget your password, we'll send it here.<br>Service updates will be emailed here, too.</span></div></div>
+		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Secret key</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='secret_key' value="<?php print($secret_key);?>"><br><span style="font-size: 10pt;">Secret key to edit your page.<br>This is stored in <strong>plaintext</strong>, so keep it simple and don't use an existing password!</span></div></div>
+		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Email</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='owner_email' value="<?php print($owner_email);?>"><br><span style="font-size: 10pt;"><?php if (!(check_email_address($owner_email)) && ($owner_email != "")) { print("<span style='color: yellow'>Email address not valid!</span><br>"); } ?>If you forget your password, we'll send it here.<br>Service updates will be emailed here, too.</span></div></div>
 		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt;" value='create page &raquo;' class="button orange"></div>
 	</div>
 </form>

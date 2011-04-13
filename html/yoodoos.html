@@ -7,16 +7,17 @@
 	
 <div id="header">
 	<span class="orange">&nbsp;Yoodoos<span style="font-size: 12pt;">.com&nbsp;<br></span></span>
-	<span style="font-size: 12pt;">One Page Domain via DNS CNAME</span><br>
+	<span style="font-size: 12pt;">Super simple HTML page hosting.</span><br>
 </div>
 
 <div id="intro">
-	Hi.<br><br>Yoodoos is a <span style="color: yellow;">free</span> service to host a  <span style="color: yellow;">single page</span> on your domain or sub-domain.
-    <br><br><span style="font-size: 16pt;">We just host <span style="color: yellow;">a single, editable HTML file</span> for your domain and nothing else.</span>
+	Hi.<br><br>Yoodoos is a <span style="color: yellow;">free</span> service to host <span style="color: yellow;">HTML pages</span> on your domain or sub-domain.
+    <br><br><span style="font-size: 16pt;">We just host <span style="color: yellow;">editable HTML pages</span> for your domain and nothing else.</span>
 	<br><br><span style="font-size: 13pt;">How do I set it up?
 	<br>Just point your CNAME to <span style="color: #444;">hostme.yoodoos.com</span> or root A record to <span style="color: #444;">184.72.55.6</span>
 	<br><br>Don't have a domain name?
-	<br>Make your own sub-domain by typing <span style="color: #444;"><i>your-name</i>.yoodoos.com</span> <span style="font-size: smaller;">(ie: surfing.yoodos.com)</span> into your browser address bar.
+	<br>Make your own sub-domain at &nbsp;&nbsp;<input style='font-size: 12pt;' type='text' id='new_page' name='new_page' size='12'>.yoodoos.com <button class="button orange" OnClick="window.location.href = 'http://' + document.getElementById('new_page').value + '.yoodoos.com';">create page</button>
+	<br>
 	<br><br>How do I edit my page?<br>Once you've updated your DNS entries, just visit your address and append "/edit" to the URL. To keep the riff-raff out, you'll be asked to choose a secret key to save any changes.
 	<div style="border-bottom: 1px solid #fff; padding-top: 15px; margin-bottom: 15px;"></div>
 	<span style="font-size: 16pt;">Recently added</span>
