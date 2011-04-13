@@ -38,6 +38,7 @@ else {
 	INSERT INTO  `yoodoos`.`sites` (
 	`id` ,
 	`domain` ,
+	`page` , 
 	`content` ,
 	`content_backup` ,
 	`secret_key` ,
@@ -46,7 +47,8 @@ else {
 	)
 	VALUES (
 	NULL ,  
-	'$domain_escaped',  
+	'$domain_escaped',
+	'/',  
 	'%default%', 
 	NULL ,  
 	'$secret_key_escaped',  

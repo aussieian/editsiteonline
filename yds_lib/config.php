@@ -12,4 +12,7 @@ $dbname = 'yoodoos';
 
 $host_names = array("yoodoos.com", "dev.yoodoos.com", "www.yoodoos.com", "mail.yoodoos.com", "admin.yoodoos.com", "yhs.yoodoos.com", "hostme.yoodoos.com", "184.72.55.6", "localhost");
 
+// email
+$mail_from = "Yoodoos.com <noreply@yoodoos.com>";
+
 ?>

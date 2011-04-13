@@ -20,6 +20,12 @@
 ADD INDEX ( `is_stealth` )*/
 /*ALTER TABLE `sites` CHANGE `is_stealth` `public_mode` INT( 11 ) NOT NULL DEFAULT '1'*/
 
+// add path to domains
+// ALTER TABLE  `sites` ADD  `page` VARCHAR( 512 ) NULL DEFAULT NULL AFTER  `domain` ,
+// ADD INDEX (  `page` );
+// UPDATE sites SET page = '/';
+// ALTER TABLE  `sites` DROP INDEX  `domain_2`
+// ALTER TABLE  `sites` ADD INDEX (  `domain` ,  `page` );
 
 // includes
 include("yds_lib/config.php");
@@ -30,37 +36,78 @@ mysql_select_db($dbname);
 
 // domain
 $domain = strtolower($_SERVER["HTTP_HOST"]);
+$request_uri_parts = explode("?", $_SERVER["REQUEST_URI"]);
+$page = strtolower($request_uri_parts[0]); // get first part ie: /foobar?id=1 will return /foobar
+if ($page == "") { $page = "/"; } // rewrite root page to /
 
 // hostname switching
-
-if (in_array($domain, $host_names)) {
-	// host yoodoos
-	include("html/yoodoos.html");
-}
-else {	
-	// host domain
-	if (!domain_exists($domain)) {
+function servePage($domain, $page)
+{
+	// check if its a yoodoos page
+	if (in_array($domain, $host_names)) {
+		// host yoodoos
+		include("html/yoodoos.html");
+		return;
+	}
+	
+	// check if its a reset secret key page
+	if (preg_match("/\/edit\/forgot_key$/i", $page)) {
+		email_domain_key($domain);
+		include("html/forgot_key.html");
+		return;
+	}
+	
+	// check if its an edit page
+	if (preg_match("/\/edit$/i", $page))
+	{
+		include("yds_lib/edit_page.php");
+		return;
+	}
+	
+	// new domain
+	if (!domain_exists($domain)) {		
 		// new domain
-		include("yds_lib/newdomain.php");
+		include("yds_lib/new_domain.php");
+		return;
 	}
-	else {
-		// existing domain
-		$content = get_domain_content($domain);
-		if ($content == "%default%") {
-			include("html/new_domain.html");
-		} elseif (strpos($content, "clone:") === 0) {
-			// clone domain 
-			$clone_domain = trim(substr($content, 6));
-			if (domain_exists($clone_domain)) {
-				$clone_content = get_domain_content($clone_domain);
+	
+	// new page
+	if (!page_exists($domain, $page)) {		
+		// new page
+		include("yds_lib/new_page.php");
+		return;
+	}
+	
+	// serve page
+	$content = get_page_content($domain, $page);
+
+	// default page
+	if ($content == "%default%") {
+		include("html/new_domain.html");
+		return;
+	}
+		
+	// cloned page
+	if (strpos($content, "clone:") === 0) {
+		// clone domain 
+		$clone_domain = trim(substr($content, 6));
+		if (domain_exists($clone_domain)) {
+			if (page_exists($clone_domain, $page)) {
+				$clone_content = get_page_content($clone_domain, $page);
 				print($clone_content);
-			} else {
-				print("Oops, can't clone domain '" . $clone_domain . "' (not hosted on Yoodoos) <a href='/edit'>Edit page</a>");
 			}
+		} else {
+			print("Oops, can't clone domain '" . $clone_domain . $page . "' (not hosted on Yoodoos) <a href='/edit'>Edit page</a>");
 		}
-		else {
-			print($content);
-		}
+		return;
 	}
+	
+	// serve content
+	print($content);
+	return;	
 }
+
+// start here
+servePage($domain, $page);
+
 ?>

@@ -12,16 +12,12 @@ mysql_select_db($dbname);
 
 function domain_exists($domain)
 {
-	return (get_domain_id($domain) != null);
+	return (get_page_content($domain, "/") != null);
 }
 
-function get_domain_id($domain)
+function page_exists($domain, $page)
 {
-	// get domain id
-	$SQL = "select id from sites where domain like '".mysql_real_escape_string($domain)."';";
-	$result = mysql_query($SQL);
-	$row = mysql_fetch_assoc($result); 
-	return $row['id'];
+	return (get_page_content($domain, $page) != null);
 }
 
 function is_public_domain($domain)
@@ -36,16 +32,36 @@ function is_public_domain($domain)
 function get_domain_key($domain)
 {
 	// get domain key
-	$SQL = "select secret_key from sites where domain like '".mysql_real_escape_string($domain)."';";
+	$SQL = "select secret_key from sites where domain like '".mysql_real_escape_string($domain)."' AND page LIKE '/';";
 	$result = mysql_query($SQL);
 	$row = mysql_fetch_assoc($result); 
 	return stripslashes($row['secret_key']);
 }
 
-function get_domain_content($domain)
+function get_domain_email($domain)
+{
+	// get domain email
+	$SQL = "select owner_email from sites where domain like '".mysql_real_escape_string($domain)."' AND page LIKE '/';";
+	$result = mysql_query($SQL);
+	$row = mysql_fetch_assoc($result); 
+	return stripslashes($row['owner_email']);
+}
+
+function email_domain_key($domain)
+{
+	global $mail_from;
+	
+	$key = get_domain_key($domain);
+	$email = get_domain_email($domain);
+	
+	// email owner of domain with the key
+	mail( $email, "Yoodoos Secret Key", "Hi, your secret key for " . $domain . " is: '" . $key . "'. - Yooodoos.com", "From: " . $mail_from );
+}
+
+function get_page_content($domain, $page)
 {
 	// show the page for the domain
-	$SQL = "select content from sites where domain like '".mysql_real_escape_string($domain)."';";
+	$SQL = "select content from sites where domain like '".mysql_real_escape_string($domain)."' and page like '".mysql_real_escape_string($page)."';";
 	$result = mysql_query($SQL);
 	$row = mysql_fetch_assoc($result);
 	//return $row['content'];

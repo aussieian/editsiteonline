@@ -1,22 +1,24 @@
 <html>
-<?php include("../html/head.html");?>
+<?php include("html/head.html");?>
 <body>
-<?php include("../html/header.html");?>
+<?php include("html/header.html");?>
 	<div id="editdomain">
 <?php
-
-// includes
-include("../yds_lib/config.php");
-include("../yds_lib/global.php");
 
 //print "Connected to MySQL<br>";
 mysql_select_db($dbname);
 
 // domain
 $domain = strtolower($_SERVER["HTTP_HOST"]);
+$request_uri_parts = explode("?", $_SERVER["REQUEST_URI"]);
+$page = strtolower(preg_replace("/\/edit$/i", "", $request_uri_parts[0])); // ie: /foobar/edit?id=1 will return /foobar
+if ($page == "") { $page = "/"; } // rewrite root page to /
 
 // see if domain exists yet
 if (!domain_exists($domain)) { die('Sorry, the page for <a href="http://'.$domain.'">'.$domain.'</a> has not been created yet. Go do <a href="http://'.$domain.'">that</a> first.</a>'); }
+
+// see if page exists yet
+if (!page_exists($domain, $page)) { die('Sorry, the page for <a href="http://'.$domain.$page.'">'.$domain.$page.'</a> has not been created yet. Go do <a href="http://'.$domain.$page.'">that</a> first.</a>'); }
 
 $secret_key = stripslashes($_POST["secret_key"]);
 $content = $_POST["content"];
@@ -27,7 +29,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 	
 	// get the content if it was set to empty
 	if ($content == "") {
-		$content = get_domain_content($domain);
+		$content = get_page_content($domain, $page);
 	}
 	
 	// check it's not default
@@ -47,7 +49,12 @@ if (( $real_key != $secret_key) || ($content == ""))
 	<div id="editdomainform">
 		<div style="clear: both;"><div style="float: left; width: 7em; text-align: left;">Your page</div><div style="float: left; text-align: left;"><a href="http://<?php print($domain);?>"><?php print($domain);?></a></div></div>
 		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Secret key</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='secret_key' value="<?php print($secret_key);?>"><br><span style="font-size: 10pt;"><?php if (($real_key != $secret_key) && ($_POST["content"] != "")) { print ("<span style='color: yellow'>Wrong key!</span>"); } else { print("Enter your secret key."); } ?></span></div></div>
+		<?php
+		// only show stealth for pages
+		if ($domain == "/") {
+		?>
 		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">&nbsp;</div><div style="float: left; text-align: left; width: 280px;"><input type='checkbox' name='stealth' value='yes' <?php if ($stealth == "yes") { print("checked"); } ?>><span style="font-size: 10pt;">Stealth mode. Hide from public listing.</span></div></div>
+		<?php } // end if ?>
 		<div style="clear: both; padding-top: 15px; text-align: left;">Edit HTML<br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
 		Tips:
@@ -62,8 +69,8 @@ if (( $real_key != $secret_key) || ($content == ""))
 <?php
 } // end if
 else {
-
-	$domain_id = get_domain_id($domain);
+	$domain_escaped = mysql_real_escape_string($domain);
+	$page_escaped = mysql_real_escape_string($page);
 	$content_escaped = mysql_real_escape_string($content);
 	$public_mode_escaped = 1;
 	if ($stealth == "yes")
@@ -76,12 +83,11 @@ $SQL = <<<EOT
 	SET `content_backup` =  `content`,
 	`public_mode` = $public_mode_escaped,
 	`content` = '$content_escaped'
-	WHERE  `sites`.`id` = $domain_id;
+	WHERE  `sites`.`domain` LIKE '$domain_escaped' AND `page` LIKE '$page_escaped';
 EOT;
-//echo $SQL;
 mysql_query($SQL);
 ?>
-Your domain <a href="http://<?php print($domain);?>"><?php print($domain);?></a> has been saved.
+Your page <a href="http://<?php print($domain.$page);?>"><?php print($domain.$page);?></a> has been saved.
 <?
 }
 ?>
