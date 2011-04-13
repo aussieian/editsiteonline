@@ -30,6 +30,32 @@ ALTER TABLE  `sites` ADD INDEX (  `domain` ,  `page` );
 ALTER TABLE  `sites` ADD  `view_count` INT NOT NULL
 */
 
+// nginx rewrite config
+/*
+# Rewrite urls
+location / {
+
+    if (!-f $request_filename) {
+       rewrite  ^(.*)$  /index.php last;
+       break;
+    }
+
+    if (!-d $request_filename) {
+       rewrite  ^(.*)$  /index.php last;
+       break;
+    }
+}
+*/
+
+// apache .htaccess rewrite config
+/*
+RewriteEngine on
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule .* index.php [L]
+*/
+
+
 // includes
 include("yds_lib/config.php");
 include("yds_lib/global.php");

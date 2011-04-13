@@ -65,16 +65,14 @@ if (( $real_key != $secret_key) || ($content == ""))
 		<div style="clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt;" value='save page &raquo;' class="button orange"></div>
 	</div>
 </form>
-	
+
 	<div id='domainpages'>
 	<h2>Pages on this domain</h2>
 	<ul>
-<?php
-	foreach (get_domain_pages($domain) as $edit_page) {
-?>
+<?php foreach (get_domain_pages($domain) as $edit_page) { ?>
 	<li><a href="http://<?php print($domain.$edit_page);?>"><?php print($domain.$edit_page);?></a> <span style='font-size: smaller;'><a style='color: yellow;' href="http://<?php print(str_replace("//", "/", ($domain.$edit_page."/edit")));?>">edit</a></span>
 <?
-	}
+	} // end foreach
 ?>
 	<li><?php print($domain);?>/<input style='font-size: 12pt;' type='text' id='new_page' name='new_page'> <button class="button orange" OnClick="window.location.href = '/' + document.getElementById('new_page').value;">create page</button>
 	</ul>
