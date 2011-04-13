@@ -118,7 +118,14 @@ function servePage($domain, $page)
 	// serve page
 	$root_content = get_page_content($domain, "/");
 	$content = get_page_content($domain, $page);
-		
+	
+	// compatibility fix for old "clone:" syntax
+	// ie: "clone:somedomain.com"
+	if (strpos($root_content, "clone:") !== 0) {
+		$parts = explode($root_content, ":");
+		$root_content = "#YOODOOS_CLONE:".$parts[1]."#";
+	}
+	
 	// new page and domain not cloned
 	if ((strpos($root_content, "#YOODOOS_CLONE:") !== 0) && (!page_exists($domain, $page))) {
 		include("yds_lib/new_page.php");
