@@ -161,21 +161,21 @@ intput.checkbox { width: 20px; height: 20px; font-size: 18pt; }
 
 .red {
 	color: #fef4e9;
-	border: solid 1px #EB6841;
-	background: #CC333F;
-	background: -webkit-gradient(linear, left top, left bottom, from(#CC333F), to(#f47a20));
-	background: -moz-linear-gradient(top,  #CC333F,  #f47a20);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+	border: solid 1px #AB0067;
+	background: #DE00A3;
+	background: -webkit-gradient(linear, left top, left bottom, from(#DE00A3), to(#800082));
+	background: -moz-linear-gradient(top,  #DE00A3,  #800082);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#CC333F', endColorstr='#800082');
 }
 .red:hover {
-	background: #CC333F;
-	background: -webkit-gradient(linear, left top, left bottom, from(#CC333F), to(#f06015));
-	background: -moz-linear-gradient(top,  #CC333F,  #f06015);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
+	background: #DE00A3;
+	background: -webkit-gradient(linear, left top, left bottom, from(#DE00A3), to(#800082));
+	background: -moz-linear-gradient(top,  #DE00A3,  #800082);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#DE00A3', endColorstr='#800082');
 }
 .red:active {
-	color: #fef4e9;
-	background: -webkit-gradient(linear, left top, left bottom, from(#CC333F), to(#faa51a));
-	background: -moz-linear-gradient(top,  #CC333F,  #faa51a);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
+	color: #DE00A3;
+	background: -webkit-gradient(linear, left top, left bottom, from(#DE00A3), to(#800082));
+	background: -moz-linear-gradient(top,  #DE00A3,  #800082);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#DE00A3', endColorstr='#800082');
 }
