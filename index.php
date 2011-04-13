@@ -122,7 +122,7 @@ function servePage($domain, $page)
 	// compatibility fix for old "clone:" syntax
 	// ie: "clone:somedomain.com"
 	if (strpos($root_content, "clone:") === 0) {
-		$parts = explode($root_content, ":");
+		$parts = explode(":", $root_content);
 		$root_content = "#YOODOOS_CLONE:".$parts[1]."#";
 	}
 	
