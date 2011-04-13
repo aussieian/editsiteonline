@@ -135,6 +135,20 @@ function get_domain_pages($domain)
 	return $pages;	
 }
 
+function update_view_count($domain, $page)
+{
+	$SQL = "update sites set view_count = view_count + 1 where domain like '".mysql_real_escape_string($domain)."' and page like '".mysql_real_escape_string($page)."';";
+	$result = mysql_query($SQL);
+}
+
+function get_view_count($domain, $page)
+{
+	// show the page for the domain
+	$SQL = "select view_count from sites where domain like '".mysql_real_escape_string($domain)."' and page like '".mysql_real_escape_string($page)."';";
+	$result = mysql_query($SQL);
+	$row = mysql_fetch_assoc($result);
+	return $row['view_count'];
+}
 
 function make_random_string($length=5) 
 {
@@ -144,12 +158,6 @@ function make_random_string($length=5)
         $string .= $characters[mt_rand(0, strlen($characters))];
     }
     return $string;
-}
-
-function update_view_count($domain, $page)
-{
-	$SQL = "update sites set view_count = view_count + 1 where domain like '".mysql_real_escape_string($domain)."' and page like '".mysql_real_escape_string($page)."';";
-	$result = mysql_query($SQL);
 }
 
 // from: http://www.linuxjournal.com/article/9585

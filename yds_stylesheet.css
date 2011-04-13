@@ -72,6 +72,14 @@ ul .intro { margin-top: 0px; font-size: 12pt;}
 	border-top: 1px solid lightgreen;
 }
 
+#domainstats { 
+	text-align: left;
+	font-size: 12pt;
+	margin-top: 30px;
+	padding-top: 12px;
+	border-top: 1px solid lightgreen;
+}
+
 intput.checkbox { width: 20px; height: 20px; font-size: 18pt; }
 
 .editcontent {
