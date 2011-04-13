@@ -65,7 +65,7 @@ function email_domain_key($domain)
 	$email = get_domain_email($domain);
 	
 	// email owner of domain with the key
-	mail( $email, "Yoodoos Secret Key", "Hi, \n\nyour secret key for " . $domain . " is: \n\n" . $key . "\n\n.- Yooodoos.com", "From: " . $mail_from );
+	mail( $email, "Yoodoos Secret Key", "Hi, \n\nyour secret key for " . $domain . " is: \n\n" . $key . "\n\n- Yooodoos.com", "From: " . $mail_from );
 }
 
 function get_page_content($domain, $page)
