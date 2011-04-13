@@ -90,7 +90,7 @@ function get_page_backup($domain, $page)
 function get_recent_domains($limit)
 {
 	// show the page for the domain
-	$SQL = "select domain from sites where content not like '\%default\%' and public_mode = 1 and domain not like '%yoodoos.com%' order by id desc limit ".$limit.";";
+	$SQL = "select domain from sites where content not like '\%default\%' and page like '/' and public_mode = 1 and domain not like '%yoodoos.com%' order by id desc limit ".$limit.";";
 	$result = mysql_query($SQL);
 	$recent_domains = array();
 	while ($row = mysql_fetch_assoc($result)) {
@@ -102,7 +102,7 @@ function get_recent_domains($limit)
 function get_recent_yoodoos_domains($limit)
 {
 	// show the page for the domain
-	$SQL = "select domain from sites where content not like '\%default\%' and public_mode = 1 and domain like '%yoodoos.com%' order by id desc limit ".$limit.";";
+	$SQL = "select domain from sites where content not like '\%default\%' and page like '/' and public_mode = 1 and domain like '%yoodoos.com%' order by id desc limit ".$limit.";";
 	$result = mysql_query($SQL);
 	$recent_domains = array();
 	while ($row = mysql_fetch_assoc($result)) {
@@ -114,7 +114,7 @@ function get_recent_yoodoos_domains($limit)
 function get_hidden_domains($limit)
 {
 	// show the page for the domain
-	$SQL = "select domain from sites where content not like '\%default\%' and public_mode = 0 order by id desc limit ".$limit.";";
+	$SQL = "select domain from sites where content not like '\%default\%' and page like '/' and public_mode = 0 order by id desc limit ".$limit.";";
 	$result = mysql_query($SQL);
 	$recent_domains = array();
 	while ($row = mysql_fetch_assoc($result)) {
