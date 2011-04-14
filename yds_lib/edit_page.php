@@ -77,7 +77,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 	<h2>Pages on this domain</h2>
 	<ul>
 <?php foreach (get_domain_pages($domain) as $edit_page) { ?>
-	<li><a href="http://<?php print($domain.$edit_page);?>"><?php print($domain.$edit_page);?></a> <span style='font-size: smaller;'><a style='color: #00A0B0;' href="http://<?php print(str_replace("//", "/", ($domain.$edit_page."/edit")));?>">edit</a> <a style='color: #00A0B0;' href="http://<?php print(str_replace("//", "/", ($domain.$edit_page."/rename")));?>">rename</a> <a style='color: red;' href="http://<?php print(str_replace("//", "/", ($domain.$edit_page."/remove")));?>">remove</a></span>
+	<li><a href="http://<?php print($domain.$edit_page);?>"><?php print($domain.$edit_page);?></a> <span style='font-size: smaller;'><a style='color: #00A0B0;' href="http://<?php print(str_replace("//", "/", ($domain.$edit_page."/edit")));?>">edit</a> <?php if($edit_page != "/") {?><a style='color: #00A0B0;' href="http://<?php print(str_replace("//", "/", ($domain.$edit_page."/rename")));?>">rename</a> <a style='color: red;' href="http://<?php print(str_replace("//", "/", ($domain.$edit_page."/remove")));?>">remove</a></span><?php } ?>
 <?
 	} // end foreach
 ?>
