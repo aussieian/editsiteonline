@@ -16,7 +16,7 @@ a { color: #CC333F;}
 	padding-top: 20px;
 	padding-bottom: 20px;
 }
-	
+
 #newdomain, #editdomain, #remove_page, #error { 
 	font-size: 18pt; 
 	margin-left: auto;
@@ -66,6 +66,15 @@ a { color: #CC333F;}
 	background-color: #EDC951;
 	border: 8px dotted #EB6841;
 	margin-bottom: 12px;
+}
+
+#intro_subdomain {
+	color: #eee;
+	margin-top: 22px;
+	padding: 10px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #00A0B0;
 }
 
 #footer { 
