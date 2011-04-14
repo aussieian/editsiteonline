@@ -72,8 +72,8 @@ a { color: #CC333F;}
 	color: #eee;
 	margin-top: 22px;
 	padding: 10px;
-	-moz-border-radius: 5px;
-	border-radius: 5px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
 	background-color: #00A0B0;
 }
 
