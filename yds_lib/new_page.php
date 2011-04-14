@@ -36,6 +36,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 <?php
 } // end if
 else {
+	$_SESSION['secret_key'] = $secret_key; // set session
 	create_domain_page($domain, $page, $content, $secret_key, $owner_email);
 	include("html/new_page.html");
 }
