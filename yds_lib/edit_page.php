@@ -97,6 +97,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 <?php
 } // end if
 else {
+	$_SESSION['secret_key'] = $secret_key; // set session
 	edit_domain_page($domain, $page, $content, $stealth);	
 ?>
 Your page <a href="http://<?php print($domain.$page);?>"><?php print($domain.$page);?></a> has been saved.
