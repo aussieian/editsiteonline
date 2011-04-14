@@ -3,13 +3,15 @@
 $secret_key = $_POST["secret_key"];
 $owner_email = $_POST["owner_email"];
 
+// set secret key from session
+if ((!isset($_POST['secret_key'])) && isset($_SESSION['secret_key'])) { $secret_key = $_SESSION['secret_key']; }
+
+// form validation
 if (($secret_key == "") || (!(check_email_address($owner_email))))
 {
-	// show the form for the secret key and email
-	if ($secret_key == "") { 
-		$secret_key = make_random_string();
-	}
-	
+	// generate a new key
+	if ($secret_key == "") {  $secret_key = make_random_string(); }
+	$_SESSION['secret_key'] = $secret_key; // set session
 ?>
 <html>
 <?php include("html/head.html");?>
@@ -31,34 +33,9 @@ if (($secret_key == "") || (!(check_email_address($owner_email))))
 <?php
 } // end if
 else {
-	// create new domain page
-	$domain_escaped = mysql_real_escape_string($domain);
-	$secret_key_escaped = mysql_real_escape_string($secret_key);  
-	$owner_email_escaped = mysql_real_escape_string($owner_email);
 	
-	$SQL = <<<EOT
-	INSERT INTO  `yoodoos`.`sites` (
-	`id` ,
-	`domain` ,
-	`page` , 
-	`content` ,
-	`content_backup` ,
-	`secret_key` ,
-	`owner_email` ,
-	`last_update`
-	)
-	VALUES (
-	NULL ,  
-	'$domain_escaped',
-	'/',  
-	'%default%', 
-	NULL ,  
-	'$secret_key_escaped',  
-	'$owner_email_escaped', 
-	CURRENT_TIMESTAMP
-	);
-EOT;
-mysql_query($SQL);
-include("html/new_domain.html");
+	$_SESSION['secret_key'] = $secret_key; // set session
+	create_domain($domain, $content, $secret_key, $owner_email);
+	include("html/new_domain.html");
 }
 ?>

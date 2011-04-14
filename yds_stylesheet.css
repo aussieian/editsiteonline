@@ -17,7 +17,7 @@ a { color: #CC333F;}
 	padding-bottom: 20px;
 }
 	
-#newdomain, #editdomain { 
+#newdomain, #editdomain, #remove_page, #error { 
 	font-size: 18pt; 
 	margin-left: auto;
 	margin-right: auto;
@@ -80,7 +80,7 @@ a { color: #CC333F;}
 
 ul .intro { margin-top: 0px; font-size: 12pt;}
 
-#newdomainform input, #editdomain input { 
+#newdomainform input, #editdomain input, #remove_page input { 
 	font-size: 18pt;
 	color: #555;
 }

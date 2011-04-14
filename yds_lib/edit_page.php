@@ -15,15 +15,19 @@ $page = strtolower(preg_replace("/\/edit.*?$/i", "", $request_uri_parts[0])); //
 if ($page == "") { $page = "/"; } // rewrite root page to /
 
 // see if domain exists yet
-if (!domain_exists($domain)) { die('Sorry, the page for <a href="http://'.$domain.'">'.$domain.'</a> has not been created yet. Go do <a href="http://'.$domain.'">that</a> first.</a>'); }
+if (!domain_exists($domain)) { die('<div id="error">Sorry, the page for <a href="http://'.$domain.'">'.$domain.'</a> has not been created yet.</div>'); }
 
 // see if page exists yet
-if (!page_exists($domain, $page)) { die('Sorry, the page for <a href="http://'.$domain.$page.'">'.$domain.$page.'</a> has not been created yet. Go do <a href="http://'.$domain.$page.'">that</a> first.</a>'); }
+if (!page_exists($domain, $page)) { die('<div id="error">Sorry, the page for <a href="http://'.$domain.$page.'">'.$domain.$page.'</a> has not been created yet.</div>'); }
 
 $secret_key = stripslashes($_POST["secret_key"]);
-$content = $_POST["content"];
+$content = stripslashes($_POST["content"]);
 $stealth = stripslashes($_POST["stealth"]);
 $real_key = get_domain_key($domain);
+
+// set secret key from session
+if ((!isset($_POST['secret_key'])) && isset($_SESSION['secret_key'])) { $secret_key = $_SESSION['secret_key']; }
+
 if (( $real_key != $secret_key) || ($content == ""))
 {
 	// get the content if it was set to empty
@@ -73,7 +77,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 	<h2>Pages on this domain</h2>
 	<ul>
 <?php foreach (get_domain_pages($domain) as $edit_page) { ?>
-	<li><a href="http://<?php print($domain.$edit_page);?>"><?php print($domain.$edit_page);?></a> <span style='font-size: smaller;'><a style='color: #00A0B0;' href="http://<?php print(str_replace("//", "/", ($domain.$edit_page."/edit")));?>">edit</a></span>
+	<li><a href="http://<?php print($domain.$edit_page);?>"><?php print($domain.$edit_page);?></a> <span style='font-size: smaller;'><a style='color: #00A0B0;' href="http://<?php print(str_replace("//", "/", ($domain.$edit_page."/edit")));?>">edit</a> <a style='color: #00A0B0;' href="http://<?php print(str_replace("//", "/", ($domain.$edit_page."/rename")));?>">rename</a> <a style='color: red;' href="http://<?php print(str_replace("//", "/", ($domain.$edit_page."/remove")));?>">remove</a></span>
 <?
 	} // end foreach
 ?>
@@ -93,23 +97,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 <?php
 } // end if
 else {
-	$domain_escaped = mysql_real_escape_string($domain);
-	$page_escaped = mysql_real_escape_string($page);
-	$content_escaped = mysql_real_escape_string($content);
-	$public_mode_escaped = 1;
-	if ($stealth == "yes")
-	{
-		$public_mode_escaped = 0;
-	} 
-	
-$SQL = <<<EOT
-	UPDATE  `yoodoos`.`sites` 
-	SET `content_backup` =  `content`,
-	`public_mode` = $public_mode_escaped,
-	`content` = '$content_escaped'
-	WHERE  `sites`.`domain` LIKE '$domain_escaped' AND `page` LIKE '$page_escaped';
-EOT;
-mysql_query($SQL);
+	edit_domain_page($domain, $page, $content, $stealth);	
 ?>
 Your page <a href="http://<?php print($domain.$page);?>"><?php print($domain.$page);?></a> has been saved.
 <?

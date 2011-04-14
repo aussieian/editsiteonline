@@ -1,5 +1,8 @@
 <?php
 
+// start session
+session_start();
+
 // get config
 include("config.php");
 
@@ -20,6 +23,93 @@ function page_exists($domain, $page)
 	return (get_num_pages($domain, $page) > 0);
 }
 
+function create_domain_page($domain, $page, $content, $secret_key, $owner_email)
+{
+	// create new domain page
+	$domain_escaped = mysql_real_escape_string($domain);
+	$page_escaped = mysql_real_escape_string($page);
+	$content_escaped = mysql_real_escape_string($content);
+	$secret_key_escaped = mysql_real_escape_string($secret_key);  
+	$owner_email_escaped = mysql_real_escape_string($owner_email);
+
+	$SQL = <<<EOT
+	INSERT INTO  `yoodoos`.`sites` (
+	`id` ,
+	`domain` ,
+	`page` , 
+	`content` ,
+	`content_backup` ,
+	`secret_key` ,
+	`owner_email` ,
+	`last_update`
+	)
+	VALUES (
+	NULL ,  
+	'$domain_escaped', 
+	'$page_escaped',
+	'$content_escaped', 
+	NULL ,  
+	'',  
+	'$owner_email_escaped', 
+	CURRENT_TIMESTAMP
+	);
+EOT;
+mysql_query($SQL);	
+}
+
+function create_domain($domain, $content, $secret_key, $owner_email)
+{
+	// create new domain page
+	$domain_escaped = mysql_real_escape_string($domain);
+	$content_escaped = '%default%';
+	$secret_key_escaped = mysql_real_escape_string($secret_key);  
+	$owner_email_escaped = mysql_real_escape_string($owner_email);
+
+	$SQL = <<<EOT
+	INSERT INTO  `yoodoos`.`sites` (
+	`id` ,
+	`domain` ,
+	`page` , 
+	`content` ,
+	`content_backup` ,
+	`secret_key` ,
+	`owner_email` ,
+	`last_update`
+	)
+	VALUES (
+	NULL ,  
+	'$domain_escaped',
+	'/',  
+	'$content_escaped', 
+	NULL ,  
+	'$secret_key_escaped',  
+	'$owner_email_escaped', 
+	CURRENT_TIMESTAMP
+	);
+EOT;
+	mysql_query($SQL);
+}
+
+function edit_domain_page($domain, $page, $content, $stealth="no")
+{
+	$domain_escaped = mysql_real_escape_string($domain);
+	$page_escaped = mysql_real_escape_string($page);
+	$content_escaped = mysql_real_escape_string($content);
+	$public_mode_escaped = 1;
+	if ($stealth == "yes")
+	{
+		$public_mode_escaped = 0;
+	} 
+
+$SQL = <<<EOT
+	UPDATE  `yoodoos`.`sites` 
+	SET `content_backup` =  `content`,
+	`public_mode` = $public_mode_escaped,
+	`content` = '$content_escaped'
+	WHERE  `sites`.`domain` LIKE '$domain_escaped' AND `page` LIKE '$page_escaped';
+EOT;
+	mysql_query($SQL);	
+}
 
 function get_num_pages($domain, $page)
 {
@@ -149,6 +239,28 @@ function get_view_count($domain, $page)
 	$row = mysql_fetch_assoc($result);
 	return $row['view_count'];
 }
+
+function remove_page($domain, $page)
+{
+	// remove the page
+	$SQL = "delete from sites where domain like '".mysql_real_escape_string($domain)."' and page like '".mysql_real_escape_string($page)."';";
+	$result = mysql_query($SQL);
+	return;
+}
+
+function rename_page($domain, $page, $new_page)
+{
+	// check if page already exists
+	if (page_exists($domain, $new_page)) { 
+		return false;
+	}
+	
+	// rename the page
+	$SQL = "update sites set page = '".mysql_real_escape_string($new_page)."' where domain like '".mysql_real_escape_string($domain)."' and page like '".mysql_real_escape_string($page)."';";
+	$result = mysql_query($SQL);
+	return true;
+}
+
 
 function make_random_string($length=5) 
 {

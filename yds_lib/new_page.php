@@ -2,10 +2,17 @@
 
 $secret_key = stripslashes($_POST["secret_key"]);
 $real_key = get_domain_key($domain);
-$content = $_POST["content"];
+$content = stripslashes($_POST["content"]);
 
-if (( $real_key != $secret_key))
+// set secret key from session
+if ((!isset($_POST['secret_key'])) && isset($_SESSION['secret_key'])) { $secret_key = $_SESSION['secret_key']; }
+
+if (( $real_key != $secret_key) || ($content == ""))
 {
+	// default content
+	if ($content == "") { 
+	$content = "Put your HTML in here.\n\nTo edit, simply append /edit at the end of the URL.";
+	}
 ?>
 <html>
 <?php include("html/head.html");?>
@@ -29,36 +36,7 @@ if (( $real_key != $secret_key))
 <?php
 } // end if
 else {
-	// create new domain page
-	$content_escaped = mysql_real_escape_string($content);
-	$domain_escaped = mysql_real_escape_string($domain);
-	$page_escaped = mysql_real_escape_string($page);
-	$secret_key_escaped = mysql_real_escape_string($secret_key);  
-	$owner_email_escaped = mysql_real_escape_string($owner_email);
-	
-	$SQL = <<<EOT
-	INSERT INTO  `yoodoos`.`sites` (
-	`id` ,
-	`domain` ,
-	`page` , 
-	`content` ,
-	`content_backup` ,
-	`secret_key` ,
-	`owner_email` ,
-	`last_update`
-	)
-	VALUES (
-	NULL ,  
-	'$domain_escaped', 
-	'$page_escaped',
-	'$content_escaped', 
-	NULL ,  
-	'',  
-	'$owner_email_escaped', 
-	CURRENT_TIMESTAMP
-	);
-EOT;
-mysql_query($SQL);
-include("html/new_page.html");
+	create_domain_page($domain, $page, $content, $secret_key, $owner_email);
+	include("html/new_page.html");
 }
 ?>

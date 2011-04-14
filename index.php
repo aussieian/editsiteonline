@@ -67,6 +67,7 @@ mysql_select_db($dbname);
 $domain = strtolower($_SERVER["HTTP_HOST"]);
 $request_uri_parts = explode("?", $_SERVER["REQUEST_URI"]);
 $page = strtolower($request_uri_parts[0]); // get first part ie: /foobar?id=1 will return /foobar
+$page = rtrim($page,"/"); // remove trailing slash
 if ($page == "") { $page = "/"; } // rewrite root page to /
 $insert_page_domain = "";
 
@@ -105,6 +106,24 @@ function servePage($domain, $page)
 		if ($page == "") { $page = "/"; } // rewrite root page to /
 		$content = get_page_backup($domain, $page);
 		print($content);
+		return;
+	}
+	
+	// check if its an rename page
+	if (preg_match("/\/rename$/i", $page))
+	{
+		$page = strtolower(preg_replace("/\/rename$/i", "", $page));
+		if ($page == "") { $page = "/"; } // rewrite root page to /		
+		include("yds_lib/rename_page.php");
+		return;
+	}
+	
+	// check if its an remove page
+	if (preg_match("/\/remove$/i", $page))
+	{
+		$page = strtolower(preg_replace("/\/remove$/i", "", $page));
+		if ($page == "") { $page = "/"; } // rewrite root page to /
+		include("yds_lib/remove_page.php");
 		return;
 	}
 	
