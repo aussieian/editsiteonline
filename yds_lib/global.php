@@ -61,7 +61,7 @@ function create_domain($domain, $content, $secret_key, $owner_email)
 {
 	// create new domain page
 	$domain_escaped = mysql_real_escape_string($domain);
-	$content_escaped = '%default%';
+	$content_escaped = mysql_real_escape_string($content); //'%default%';
 	$secret_key_escaped = mysql_real_escape_string($secret_key);  
 	$owner_email_escaped = mysql_real_escape_string($owner_email);
 

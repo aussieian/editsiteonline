@@ -34,7 +34,7 @@ if (($secret_key == "") || (!(check_email_address($owner_email))))
 } // end if
 else {
 	$_SESSION['secret_key'] = $secret_key; // set session
-	create_domain($domain, $content, $secret_key, $owner_email);
+	create_domain($domain, '%default%', $secret_key, $owner_email);
 	include("html/new_domain.html");
 }
 ?>

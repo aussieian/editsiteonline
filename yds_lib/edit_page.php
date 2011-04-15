@@ -32,7 +32,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 {
 	// get the content if it was set to empty
 	if ($content == "") {
-		$content = get_page_content($domain, $page);
+		$content = htmlentities(get_page_content($domain, $page));
 	}
 	
 	// check it's not default
@@ -63,10 +63,12 @@ if (( $real_key != $secret_key) || ($content == ""))
 		<?php } // end if ?>
 		<div style="clear: both; padding-top: 15px; text-align: left;">Edit HTML <span style="font-size: 10pt;"><?php if (get_page_backup($domain, $page) != "") { ?><a style="color: #00A0B0;" href="http://<?php print($domain.$page."/backup");?>">previous version</a></span><? } ?><br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
-		Special commands:
+		Tips:
 		<ul style="margin-top: 0.5em;">
-			<li>#YOODOOS_CLONE:domainname# - clone a Yoodoos hosted domain
-			<li>#YOODOOS_PAGE:/page_url# - insert the contents of a page (useful for templates)
+			<li>Use #YOODOOS_CLONE:domainname# to clone a Yoodoos hosted domain
+			<li>Use #YOODOOS_PAGE:/page_url# to insert the contents of a page (useful for templates)
+			<li>To create a new page, just type the page URL into your browser.
+				
 		</ul>
 		</div>
 		<div style="clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt;" value='save page &raquo;' class="button orange"></div>
