@@ -208,20 +208,19 @@ function servePage($domain, $page)
 		$clone_domain = $regex_matches[1];
 		if (domain_exists($clone_domain)) {
 			if (page_exists($clone_domain, $page)) {
-				
 				$filename = get_page_filename($clone_domain, $page);
 				if ($filename != "") {
-					serveAttachment($domain, $page, false);
-					// increase page count (give count to serving domain)
-					update_view_count($domain, $page);
+					serveAttachment($clone_domain, $page, false);
+					// increase page count (give count to clone domain)
+					update_view_count($clone_domain, $page);
 					return;
 				} else {
 					$clone_content = get_page_content($clone_domain, $page);
 					// insert page templates
 					$insert_page_domain = $clone_domain;
 					$clone_content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $clone_content, 10);
-					// increase page count (give count to serving domain)
-					update_view_count($domain, $page);
+					// increase page count (give count to clone domain)
+					update_view_count($clone_domain, $page);
 					print($clone_content);	
 				}
 			}
