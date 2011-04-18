@@ -34,7 +34,7 @@ ALTER TABLE  `sites` ADD  `view_count` INT NOT NULL
 /*
 ALTER TABLE  `sites` ADD  `file_name` VARCHAR( 255 ) NULL ,
 ADD  `file_size` INT NULL ,
-ADD  `attachment_limit` INT NULL
+ADD  `attachment_limit` INT NULL;
 */
 
 // nginx rewrite config
@@ -180,14 +180,8 @@ function servePage($domain, $page)
 	
 	// new page and domain not cloned
 	if ((strpos($root_content, "#YOODOOS_CLONE:") !== 0) && (!page_exists($domain, $page))) {
-		// check for robots.txt
-		if ($page == "robots.txt") {
-			include("html/robots.txt");
-		}
-		else {
-			// new page
-			include("yds_lib/new_page.php");	
-		}
+		// new page
+		include("yds_lib/new_page.php");	
 		return;
 	}
 	

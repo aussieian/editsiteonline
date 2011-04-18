@@ -32,6 +32,10 @@ function create_domain_page($domain, $page, $content, $secret_key, $owner_email,
 	$secret_key_escaped = mysql_real_escape_string($secret_key);  
 	$owner_email_escaped = mysql_real_escape_string($owner_email);
 	$filename_escaped = mysql_real_escape_string($filename);
+	// if empty filesize, set to 0
+	if ($filesize == "") { 
+		$filesize = 0;
+	}
 
 	$SQL = <<<EOT
 	INSERT INTO  `yoodoos`.`sites` (
@@ -104,6 +108,10 @@ function edit_domain_page($domain, $page, $content, $stealth="no", $filename="",
 	$page_escaped = mysql_real_escape_string($page);
 	$content_escaped = mysql_real_escape_string($content);
 	$filename_escaped = mysql_real_escape_string($filename);
+	// if empty filesize, set to 0
+	if ($filesize == "") { 
+		$filesize = 0;
+	}
 	
 	$public_mode_escaped = 1;
 	if ($stealth == "yes")
