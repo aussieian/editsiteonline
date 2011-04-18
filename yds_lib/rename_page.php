@@ -35,7 +35,7 @@ if ($page == "/") { die('<div id="error">Sorry, you can\'t rename the home page.
 		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Secret key</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='secret_key' value="<?php print($secret_key);?>"><br><span style="font-size: 10pt;"><?php if (($real_key != $secret_key) && ($secret_key != "")) { print ("<span style='color: #00A0B0;'>Wrong key!</span> (<a style='color: #00A0B0;' href='/edit/forgot_key'>email key to domain owner</a>)</span>"); } else { print("Enter your secret key."); } ?></span><br></div></div>
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
 		</div>
-		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt;" value='rename page &raquo;' class="button orange"></div>
+		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt; color: #fff;" value='rename page &raquo;' class="button orange"></div>
 	</div>
 </form>
 </div>

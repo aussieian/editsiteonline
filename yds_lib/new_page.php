@@ -44,7 +44,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 		<div style="clear: both; padding-top: 15px; text-align: left;">Page HTML<br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
 		</div>
-		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt;" value='create page &raquo;' class="button orange"></div>
+		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt; color: #fff;" value='create page &raquo;' class="button orange"></div>
 	</div>
 </form>
 </div>

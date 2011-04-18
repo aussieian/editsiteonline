@@ -89,7 +89,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 			<li>To download an attachment, append '/download' to the end of the URL.
 		</ul>
 		</div>
-		<div style="clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt;" value='save page &raquo;' class="button orange"></div>
+		<div style="clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt; color: #fff;" value='save page &raquo;' class="button orange"></div>
 	</div>
 </form>
 
