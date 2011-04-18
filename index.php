@@ -78,6 +78,29 @@ $page = rtrim($page,"/"); // remove trailing slash
 if ($page == "") { $page = "/"; } // rewrite root page to /
 $insert_page_domain = "";
 
+
+// serve attachment
+function serveAttachment($domain, $page, $download=false)
+{
+	$filename = get_page_filename($domain, $page);
+	$filepath = $_SERVER['DOCUMENT_ROOT'] . "/yds_attachments/" . $domain . "/" . $filename;
+	$filesize = filesize($filepath);
+	$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
+	$mimetype = finfo_file($finfo, $filepath);
+	$lastmodified = gmdate("D, d M Y H:i:s", filemtime($filepath));
+	header("Last-Modified: " . $lastmodified . " GMT");
+	if (strstr($filename, ".htm")) {
+		$mimetype = "text/html"; // for some reason finfo returns text/plain for .html
+	}
+	finfo_close($finfo);
+	header("Content-Length: " . $filesize);
+	header("Content-Type: " . $mimetype);
+	if ($download) {
+		header('Content-Disposition: attachment; filename="'.$filename.'"');
+	}
+	readfile($filepath);
+}
+
 // hostname switching
 function servePage($domain, $page)
 {
@@ -141,21 +164,8 @@ function servePage($domain, $page)
 		$page = strtolower(preg_replace("/\/download$/i", "", $page));
 		$filename = get_page_filename($domain, $page);
 		if ($filename != "") {
-			$filename = get_page_filename($domain, $page);
-			$filepath = $_SERVER['DOCUMENT_ROOT'] . "/yds_attachments/" . $domain . "/" . $filename;
-			$filesize = filesize($filepath);
-			$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
-			$mimetype = finfo_file($finfo, $filepath);
-			$lastmodified = gmdate("D, d M Y H:i:s", filemtime($filepath));
-			header("Last-Modified: " . $lastmodified . " GMT");
-			if (strstr($filename, ".htm")) {
-				$mimetype = "text/html"; // for some reason finfo returns text/plain for .html
-			}
-			finfo_close($finfo);
-			header("Content-Length: " . $filesize);
-			header("Content-Type: " . $mimetype);
-			header('Content-Disposition: attachment; filename="'.$filename.'"');
-			readfile($filepath);
+			update_view_count($domain, $page);
+			serveAttachment($domain, $page, true);
 			return;
 		}
 	}
@@ -198,13 +208,22 @@ function servePage($domain, $page)
 		$clone_domain = $regex_matches[1];
 		if (domain_exists($clone_domain)) {
 			if (page_exists($clone_domain, $page)) {
-				$clone_content = get_page_content($clone_domain, $page);
-				// insert page templates
-				$insert_page_domain = $clone_domain;
-				$clone_content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $clone_content, 10);
-				// increase page count (give count to serving domain)
-				update_view_count($domain, $page);
-				print($clone_content);
+				
+				$filename = get_page_filename($clone_domain, $page);
+				if ($filename != "") {
+					serveAttachment($domain, $page, false);
+					// increase page count (give count to serving domain)
+					update_view_count($domain, $page);
+					return;
+				} else {
+					$clone_content = get_page_content($clone_domain, $page);
+					// insert page templates
+					$insert_page_domain = $clone_domain;
+					$clone_content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $clone_content, 10);
+					// increase page count (give count to serving domain)
+					update_view_count($domain, $page);
+					print($clone_content);	
+				}
 			}
 		} else {
 			print("Oops, can't clone domain '" . $clone_domain . $page . "' (not hosted on Yoodoos) <a href='/edit'>Edit page</a>");
@@ -215,20 +234,8 @@ function servePage($domain, $page)
 	// file attachment
 	$filename = get_page_filename($domain, $page);
 	if ($filename != "") {
-		$filename = get_page_filename($domain, $page);
-		$filepath = $_SERVER['DOCUMENT_ROOT'] . "/yds_attachments/" . $domain . "/" . $filename;
-		$filesize = filesize($filepath);
-		$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
-		$mimetype = finfo_file($finfo, $filepath);
-		$lastmodified = gmdate("D, d M Y H:i:s", filemtime($filepath));
-		header("Last-Modified: " . $lastmodified . " GMT");
-		if (strstr($filename, ".htm")) {
-			$mimetype = "text/html"; // for some reason finfo returns text/plain for .html
-		}
-		finfo_close($finfo);
-		header("Content-Length: " . $filesize);
-		header("Content-Type: " . $mimetype); 
-		readfile($filepath);
+		update_view_count($domain, $page);
+		serveAttachment($domain, $page, false);
 		return;
 	}
 	
