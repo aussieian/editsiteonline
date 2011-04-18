@@ -180,7 +180,7 @@ intput.checkbox { width: 20px; height: 20px; font-size: 18pt; }
 }
 
 .orange {
-	color: #F9F2E7;
+	color: #fff;
 	border: solid 1px #40C0CB;
 	background: #00A8C6;
 	background: -webkit-gradient(linear, left top, left bottom, from(#00A8C6), to(#40C0CB));
