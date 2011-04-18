@@ -245,7 +245,7 @@ function servePage($domain, $page)
 	
 	// serve content
 	update_view_count($domain, $page);
-	header("Content-Type: " . getMimeType("foo.css"));
+	header("Content-Type: " . getMimeType($page));
 	print($content);
 	return;	
 }
