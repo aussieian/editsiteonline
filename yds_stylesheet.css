@@ -69,6 +69,10 @@ a { color: #fff;}
 	padding-bottom: 20px;
 }
 
+#welcome a, #intro a {
+	color: #00A8C6;
+}
+
 #intro { 
 	font-size: 22pt; 
 	width: 700px;
