@@ -221,6 +221,7 @@ function servePage($domain, $page)
 					$clone_content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $clone_content, 10);
 					// increase page count (give count to clone domain)
 					update_view_count($clone_domain, $page);
+					header("Content-Type: " . getMimeType($page));
 					print($clone_content);	
 				}
 			}
@@ -244,6 +245,7 @@ function servePage($domain, $page)
 	
 	// serve content
 	update_view_count($domain, $page);
+	header("Content-Type: " . getMimeType("foo.css"));
 	print($content);
 	return;	
 }
