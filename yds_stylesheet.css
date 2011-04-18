@@ -26,6 +26,16 @@ a { color: #CC333F;}
 	padding-bottom: 20px;
 }
 
+#attachment_quota {
+	font-size: 10pt;
+	-moz-border-radius: 12px;
+	border-radius: 12px;
+	padding: 6px;
+	background-color: #fff;
+	border: 1px dotted #EB6841;
+	margin-top: 6px;
+}
+
 #newdomain_page {
 	width: 650px;
 	margin-left: auto;

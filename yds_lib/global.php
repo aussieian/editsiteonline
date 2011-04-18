@@ -23,7 +23,7 @@ function page_exists($domain, $page)
 	return (get_num_pages($domain, $page) > 0);
 }
 
-function create_domain_page($domain, $page, $content, $secret_key, $owner_email)
+function create_domain_page($domain, $page, $content, $secret_key, $owner_email, $filename="", $filesize=0) // 5mb default
 {
 	// create new domain page
 	$domain_escaped = mysql_real_escape_string($domain);
@@ -31,6 +31,7 @@ function create_domain_page($domain, $page, $content, $secret_key, $owner_email)
 	$content_escaped = mysql_real_escape_string($content);
 	$secret_key_escaped = mysql_real_escape_string($secret_key);  
 	$owner_email_escaped = mysql_real_escape_string($owner_email);
+	$filename_escaped = mysql_real_escape_string($filename);
 
 	$SQL = <<<EOT
 	INSERT INTO  `yoodoos`.`sites` (
@@ -41,7 +42,9 @@ function create_domain_page($domain, $page, $content, $secret_key, $owner_email)
 	`content_backup` ,
 	`secret_key` ,
 	`owner_email` ,
-	`last_update`
+	`last_update`,
+	`file_name`,
+	`file_size`
 	)
 	VALUES (
 	NULL ,  
@@ -51,13 +54,16 @@ function create_domain_page($domain, $page, $content, $secret_key, $owner_email)
 	NULL ,  
 	'',  
 	'$owner_email_escaped', 
-	CURRENT_TIMESTAMP
+	CURRENT_TIMESTAMP,
+	'$filename_escaped',
+	$filesize
 	);
 EOT;
+//die($SQL);
 mysql_query($SQL);	
 }
 
-function create_domain($domain, $content, $secret_key, $owner_email)
+function create_domain($domain, $content, $secret_key, $owner_email, $attachment_limit=5120000)
 {
 	// create new domain page
 	$domain_escaped = mysql_real_escape_string($domain);
@@ -74,7 +80,8 @@ function create_domain($domain, $content, $secret_key, $owner_email)
 	`content_backup` ,
 	`secret_key` ,
 	`owner_email` ,
-	`last_update`
+	`last_update`,
+	`attachment_limit`
 	)
 	VALUES (
 	NULL ,  
@@ -83,18 +90,21 @@ function create_domain($domain, $content, $secret_key, $owner_email)
 	'$content_escaped', 
 	NULL ,  
 	'$secret_key_escaped',  
-	'$owner_email_escaped', 
-	CURRENT_TIMESTAMP
+	'$owner_email_escaped',
+	CURRENT_TIMESTAMP,
+	$attachment_limit
 	);
 EOT;
 	mysql_query($SQL);
 }
 
-function edit_domain_page($domain, $page, $content, $stealth="no")
+function edit_domain_page($domain, $page, $content, $stealth="no", $filename="", $filesize=0)
 {
 	$domain_escaped = mysql_real_escape_string($domain);
 	$page_escaped = mysql_real_escape_string($page);
 	$content_escaped = mysql_real_escape_string($content);
+	$filename_escaped = mysql_real_escape_string($filename);
+	
 	$public_mode_escaped = 1;
 	if ($stealth == "yes")
 	{
@@ -105,7 +115,9 @@ $SQL = <<<EOT
 	UPDATE  `yoodoos`.`sites` 
 	SET `content_backup` =  `content`,
 	`public_mode` = $public_mode_escaped,
-	`content` = '$content_escaped'
+	`content` = '$content_escaped',
+	`file_name` = '$filename_escaped',
+	`file_size` = $filesize
 	WHERE  `sites`.`domain` LIKE '$domain_escaped' AND `page` LIKE '$page_escaped';
 EOT;
 	mysql_query($SQL);	
@@ -127,6 +139,47 @@ function is_public_domain($domain)
 	$result = mysql_query($SQL);
 	$row = mysql_fetch_assoc($result); 
 	return ($row['public_mode'] == 1);
+}
+
+function get_page_filename($domain, $page)
+{
+	// get domain key
+	$SQL = "select file_name from sites where domain like '".mysql_real_escape_string($domain)."' AND page LIKE '".mysql_real_escape_string($page)."';";
+	$result = mysql_query($SQL);
+	$row = mysql_fetch_assoc($result); 
+	return stripslashes($row['file_name']);
+}
+
+function get_page_filesize($domain, $page)
+{
+	// get domain key
+	$SQL = "select file_size from sites where domain like '".mysql_real_escape_string($domain)."' AND page LIKE '".mysql_real_escape_string($page)."';";
+	$result = mysql_query($SQL);
+	$row = mysql_fetch_assoc($result); 
+	return stripslashes($row['file_size']);
+}
+
+function get_domain_attachments_size($domain)
+{
+	$SQL = "select sum(file_size) as total_size from sites where domain like '".mysql_real_escape_string($domain)."';";
+	$result = mysql_query($SQL);
+	$row = mysql_fetch_assoc($result);
+	return $row['total_size'] / 1024; // KB
+}
+
+function get_domain_attachments_limit($domain)
+{
+	$SQL = "select attachment_limit from sites where domain like '".mysql_real_escape_string($domain)."' and page LIKE '/';";
+	$result = mysql_query($SQL);
+	$row = mysql_fetch_assoc($result);
+	return $row['attachment_limit'] / 1024; // KB
+}
+
+function domain_is_over_quota($domain)
+{
+	$attachments_size = get_domain_attachments_size($domain);
+	$attachments_limit = get_domain_attachments_limit($domain);
+	return ($attachments_size > $attachments_limit);
 }
 
 function get_domain_key($domain)

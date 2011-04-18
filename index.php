@@ -30,6 +30,13 @@ ALTER TABLE  `sites` ADD INDEX (  `domain` ,  `page` );
 ALTER TABLE  `sites` ADD  `view_count` INT NOT NULL
 */
 
+// add file attachments
+/*
+ALTER TABLE  `sites` ADD  `file_name` VARCHAR( 255 ) NULL ,
+ADD  `file_size` INT NULL ,
+ADD  `attachment_limit` INT NULL
+*/
+
 // nginx rewrite config
 /*
 # Rewrite urls
@@ -127,6 +134,32 @@ function servePage($domain, $page)
 		return;
 	}
 	
+	// check if it's a download page
+	// file attachment
+	if (preg_match("/\/download$/i", $page))
+	{
+		$page = strtolower(preg_replace("/\/download$/i", "", $page));
+		$filename = get_page_filename($domain, $page);
+		if ($filename != "") {
+			$filename = get_page_filename($domain, $page);
+			$filepath = $_SERVER['DOCUMENT_ROOT'] . "/yds_attachments/" . $domain . "/" . $filename;
+			$filesize = filesize($filepath);
+			$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
+			$mimetype = finfo_file($finfo, $filepath);
+			$lastmodified = gmdate("D, d M Y H:i:s", filemtime($filepath));
+			header("Last-Modified: " . $lastmodified . " GMT");
+			if (strstr($filename, ".htm")) {
+				$mimetype = "text/html"; // for some reason finfo returns text/plain for .html
+			}
+			finfo_close($finfo);
+			header("Content-Length: " . $filesize);
+			header("Content-Type: " . $mimetype);
+			header('Content-Disposition: attachment; filename="'.$filename.'"');
+			readfile($filepath);
+			return;
+		}
+	}
+	
 	// new domain
 	if (!domain_exists($domain)) {		
 		// new domain
@@ -147,7 +180,14 @@ function servePage($domain, $page)
 	
 	// new page and domain not cloned
 	if ((strpos($root_content, "#YOODOOS_CLONE:") !== 0) && (!page_exists($domain, $page))) {
-		include("yds_lib/new_page.php");
+		// check for robots.txt
+		if ($page == "robots.txt") {
+			include("html/robots.txt");
+		}
+		else {
+			// new page
+			include("yds_lib/new_page.php");	
+		}
 		return;
 	}
 	
@@ -175,6 +215,26 @@ function servePage($domain, $page)
 		} else {
 			print("Oops, can't clone domain '" . $clone_domain . $page . "' (not hosted on Yoodoos) <a href='/edit'>Edit page</a>");
 		}
+		return;
+	}
+	
+	// file attachment
+	$filename = get_page_filename($domain, $page);
+	if ($filename != "") {
+		$filename = get_page_filename($domain, $page);
+		$filepath = $_SERVER['DOCUMENT_ROOT'] . "/yds_attachments/" . $domain . "/" . $filename;
+		$filesize = filesize($filepath);
+		$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
+		$mimetype = finfo_file($finfo, $filepath);
+		$lastmodified = gmdate("D, d M Y H:i:s", filemtime($filepath));
+		header("Last-Modified: " . $lastmodified . " GMT");
+		if (strstr($filename, ".htm")) {
+			$mimetype = "text/html"; // for some reason finfo returns text/plain for .html
+		}
+		finfo_close($finfo);
+		header("Content-Length: " . $filesize);
+		header("Content-Type: " . $mimetype); 
+		readfile($filepath);
 		return;
 	}
 	

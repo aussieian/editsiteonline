@@ -24,6 +24,9 @@ $secret_key = stripslashes($_POST["secret_key"]);
 $content = stripslashes($_POST["content"]);
 $stealth = stripslashes($_POST["stealth"]);
 $real_key = get_domain_key($domain);
+$filename = stripslashes($_POST["file_upload_filename"]);
+$filesize = stripslashes($_POST["file_upload_filesize"]);
+$file_upload_remove = $_POST["file_upload_remove"];
 
 // set secret key from session
 if ((!isset($_POST['secret_key'])) && isset($_SESSION['secret_key'])) { $secret_key = $_SESSION['secret_key']; }
@@ -45,6 +48,10 @@ if (( $real_key != $secret_key) || ($content == ""))
 		$stealth = "yes";
 	}
 	
+	// get filename and filesize
+	$filename = get_page_filename($domain, $page);
+	$filesize = get_page_filesize($domain, $page);
+	
 	// show the form for the secret key and content
 ?>
 
@@ -61,6 +68,17 @@ if (( $real_key != $secret_key) || ($content == ""))
 		?>
 		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">&nbsp;</div><div style="float: left; text-align: left; width: 280px;"><input type='checkbox' name='stealth' value='yes' <?php if ($stealth == "yes") { print("checked"); } ?>><span style="font-size: 10pt;">Stealth mode. Hide from public listing.</span></div></div>
 		<?php } // end if ?>
+		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Attachment</div>
+			<div style="float: left; text-align: left; width: 320px;">
+				<input id="file_upload" name="file_upload" type="file" />
+				<input id="file_upload_filename" name="file_upload_filename" type="hidden" value="<?php print($filename);?>">
+				<input id="file_upload_filesize" name="file_upload_filesize" type="hidden" value="<?php print($filesize);?>">
+				<a style="font-size: 10pt;" href="javascript:$('#file_upload').uploadifyUpload();">Upload Files</a><br>
+				<span style="font-size: 10pt;" id="file_upload_message"><?php if($filename != "") { print("'".$filename."' (".round(($filesize/1024), 0)." KB)"); }?></span>
+				<?php if($filename != "") { ?><br><input id="file_upload_remove" name="file_upload_remove" type="checkbox" value="yes"><span style="font-size: 10pt;">Remove attachment</span><? } ?>
+				<br><div id="attachment_quota"><?php if (domain_is_over_quota($domain)) { print("<span style='color: red;'>Over Quota :( </span>"); } else { print("Quota: "); }?> You are using <?php print(round((get_domain_attachments_size($domain)/1000), 1)); ?>MB of <?php print(round((get_domain_attachments_limit($domain)/1000), 1)); ?>MB <br>(<a target="_blank" href="http://yoodoos.com/#donate">Donate</a> to get more quota.)</div>
+			</div>
+		</div>
 		<div style="clear: both; padding-top: 15px; text-align: left;">Edit HTML <span style="font-size: 10pt;"><?php if (get_page_backup($domain, $page) != "") { ?><a style="color: #00A0B0;" href="http://<?php print($domain.$page."/backup");?>">previous version</a></span><? } ?><br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
 		Tips:
@@ -98,9 +116,16 @@ if (( $real_key != $secret_key) || ($content == ""))
 
 <?php
 } // end if
-else {
+else {	
+	
+	// remove attachment?
+	if (($file_upload_remove == "yes") || (domain_is_over_quota($domain))) {
+		$filename = "";
+		$filesize = 0;
+	}
+	
 	$_SESSION['secret_key'] = $secret_key; // set session
-	edit_domain_page($domain, $page, $content, $stealth);	
+	edit_domain_page($domain, $page, $content, $stealth, $filename, $filesize);	
 ?>
 Your page <a href="http://<?php print($domain.$page);?>"><?php print($domain.$page);?></a> has been saved.
 <?

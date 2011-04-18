@@ -1,5 +1,31 @@
 <head>
 	<title>Yoodoos.com - Super simple HTML page hosting</title>
 	<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+	
     <link type='text/css' href='/yds_stylesheet.css' rel='stylesheet' />
+	<link href="/yds_lib/uploadify/uploadify.css" type="text/css" rel="stylesheet" />
+	<script type="text/javascript" src="/yds_lib/uploadify/jquery-1.4.2.min.js"></script>
+	<script type="text/javascript" src="/yds_lib/uploadify/swfobject.js"></script>
+	<script type="text/javascript" src="/yds_lib/uploadify/jquery.uploadify.v2.1.4.min.js"></script>
+	<script type="text/javascript">
+	
+	$(document).ready(function() {
+	  $('#file_upload').uploadify({
+	    'uploader'  : '/yds_lib/uploadify/uploadify.swf',
+	    'script'    : '/yds_lib/uploadify/uploadify.php',
+	    'checkScript'    : '/yds_lib/uploadify/check.php',
+	    'cancelImg' : '/yds_lib/uploadify/cancel.png',
+	    'folder'    : '',
+	    'auto'      : false,
+		'sizeLimit'   : 102400000, // 10Mb
+		onComplete: function(event, queueID, fileObj, reponse, data) 
+		{
+			$('#file_upload_message').html("file '" + fileObj.name + "' uploaded successfully (" + Math.round(fileObj.size / 1024).toString() + "KB)");
+			$('#file_upload_filename').val(fileObj.name);
+			$('#file_upload_filesize').val(fileObj.size);
+		}
+	  });
+	});
+	</script>
+	
 </head>
