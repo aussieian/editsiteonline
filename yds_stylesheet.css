@@ -125,6 +125,10 @@ ul .intro { margin-top: 0px; font-size: 12pt;}
 	border-top: 1px solid #AEE239;
 }
 
+#domainpages a {
+	color: #40C0CB;
+}
+
 #domainstats { 
 	text-align: left;
 	font-size: 12pt;
