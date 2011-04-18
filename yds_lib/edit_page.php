@@ -86,7 +86,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 			<li>Use #YOODOOS_CLONE:domainname# to clone a Yoodoos hosted domain
 			<li>Use #YOODOOS_PAGE:/page_url# to insert the contents of a page (useful for templates)
 			<li>To create a new page, just type the page URL into your browser.
-				
+			<li>To download an attachment, append '/download' to the end of the URL.
 		</ul>
 		</div>
 		<div style="clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt;" value='save page &raquo;' class="button orange"></div>
