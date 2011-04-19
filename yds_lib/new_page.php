@@ -2,7 +2,7 @@
 
 $secret_key = stripslashes($_POST["secret_key"]);
 $real_key = get_domain_key($domain);
-$content = stripslashes($_POST["content"]);
+$content = $_POST["content"];
 $filename = stripslashes($_POST["file_upload_filename"]);
 $filesize = stripslashes($_POST["file_upload_filesize"]);
 

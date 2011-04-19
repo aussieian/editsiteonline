@@ -21,7 +21,7 @@ if (!domain_exists($domain)) { die('<div id="error">Sorry, the page for <a href=
 if (!page_exists($domain, $page)) { die('<div id="error">Sorry, the page for <a href="http://'.$domain.$page.'">'.$domain.$page.'</a> has not been created yet.</div>'); }
 
 $secret_key = stripslashes($_POST["secret_key"]);
-$content = stripslashes($_POST["content"]);
+$content = $_POST["content"];
 $stealth = stripslashes($_POST["stealth"]);
 $real_key = get_domain_key($domain);
 $filename = stripslashes($_POST["file_upload_filename"]);
