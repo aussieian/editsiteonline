@@ -88,17 +88,41 @@ function serveAttachment($domain, $page, $download=false)
 	$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
 	$mimetype = finfo_file($finfo, $filepath);
 	$lastmodified = gmdate("D, d M Y H:i:s", filemtime($filepath));
-	header("Last-Modified: " . $lastmodified . " GMT");
 	if (strstr($filename, ".htm")) {
 		$mimetype = "text/html"; // for some reason finfo returns text/plain for .html
 	}
 	finfo_close($finfo);
+
+	// send headers
+	caching_headers($filepath, filemtime($filepath));
 	header("Content-Length: " . $filesize);
 	header("Content-Type: " . $mimetype);
 	if ($download) {
 		header('Content-Disposition: attachment; filename="'.$filename.'"');
 	}
 	readfile($filepath);
+}
+
+// see http://stackoverflow.com/questions/2000715/answering-http-if-modified-since-and-http-if-none-match-in-php
+function caching_headers($file, $timestamp)
+{
+	$gmt_mtime = gmdate('r', $timestamp);
+	header('ETag: "'.md5($timestamp.$file).'"');
+
+	if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) || isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+		if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime || str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == md5($timestamp.$file)) {
+		header('HTTP/1.1 304 Not Modified');
+		exit();
+		}
+	}
+
+	header('Last-Modified: '.$gmt_mtime);
+	header('Cache-Control: public');
+	header('Pragma: public'); // ianc
+
+	// http://stackoverflow.com/questions/1385964/how-to-get-the-browser-to-cache-images-with-php
+	header('Cache-control: public, max-age='.(60*60*24*365));
+	header('Expires: '.gmdate(DATE_RFC1123,time()+60*60*24*365));
 }
 
 // hostname switching
@@ -241,7 +265,7 @@ function servePage($domain, $page)
 	
 	// insert page templates
 	$insert_page_domain = $domain;
-	$content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $content, 10);
+	$content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $content, 16);
 	
 	// serve content
 	update_view_count($domain, $page);
