@@ -277,7 +277,7 @@ function get_hidden_domains($limit)
 function get_domain_pages($domain)
 {
 	// show the page for the domain
-	$SQL = "select page from sites where domain like '".mysql_real_escape_string($domain)."' order by id asc;";
+	$SQL = "select page from sites where domain like '".mysql_real_escape_string($domain)."' order by page asc;";
 	$result = mysql_query($SQL);
 	$pages = array();
 	while ($row = mysql_fetch_assoc($result)) {
