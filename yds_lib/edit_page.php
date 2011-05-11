@@ -13,10 +13,10 @@ $domain = strtolower($_SERVER["HTTP_HOST"]);
 // check for #! escaped_fragment URL and if so serve it as a page
 // see http://code.google.com/web/ajaxcrawling/docs/faq.html
 if (strpos($_SERVER["REQUEST_URI"], "?_escaped_fragment_=")) {
-	$page = strtolower(preg_replace("/\/edit.*?$/i", "", $_SERVER["REQUEST_URI"])); // ie: /foobar/edit?id=1 will return /foobar
+	$page = strtolower(preg_replace("/\/(edit|create).*?$/i", "", $_SERVER["REQUEST_URI"])); // ie: /foobar/edit?id=1 will return /foobar
 } else {
 	$request_uri_parts = explode("?", $_SERVER["REQUEST_URI"]);
-	$page = strtolower(preg_replace("/\/edit.*?$/i", "", $request_uri_parts[0])); // ie: /foobar/edit?id=1 will return /foobar
+	$page = strtolower(preg_replace("/\/(edit|create).*?$/i", "", $request_uri_parts[0])); // ie: /foobar/edit?id=1 will return /foobar
 }
 if ($page == "") { $page = "/"; } // rewrite root page to /
 
@@ -29,6 +29,7 @@ if (!page_exists($domain, $page)) { die('<div id="error">Sorry, the page for <a 
 $secret_key = stripslashes($_POST["secret_key"]);
 $content = $_POST["content"];
 $stealth = stripslashes($_POST["stealth"]);
+$hide_create_page = stripslashes($_POST["hide_create_page"]);
 $real_key = get_domain_key($domain);
 $filename = stripslashes($_POST["file_upload_filename"]);
 $filesize = stripslashes($_POST["file_upload_filesize"]);
@@ -54,6 +55,11 @@ if (( $real_key != $secret_key) || ($content == ""))
 		$stealth = "yes";
 	}
 	
+	// set hide create page
+	if (($_POST['hide_create_page'] == "") and (hide_create_page($domain))) {
+		$hide_create_page = "yes";
+	}
+
 	// get filename and filesize
 	$filename = get_page_filename($domain, $page);
 	$filesize = get_page_filesize($domain, $page);
@@ -69,10 +75,11 @@ if (( $real_key != $secret_key) || ($content == ""))
 		<div style="clear: both;"><div style="float: left; width: 7em; text-align: left;">Your page</div><div style="float: left; text-align: left;"><a href="http://<?php print($domain.$page);?>"><?php print($domain.$page);?></a></div></div>
 		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Secret key</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='secret_key' value="<?php print($secret_key);?>"><br><span style="font-size: 10pt;"><?php if (($real_key != $secret_key) && ($_POST["content"] != "")) { print ("<span style='color: #cc2a41;'>Wrong key! (<a style='color: #cc2a41;' href='/edit/forgot_key'>email key to domain owner</a>)</span>"); } else { print("Enter your secret key."); } ?></span></div></div>
 		<?php
-		// only show stealth for pages
+		// only show public and hide create page for index page 
 		if ($page == "/") {
 		?>
 		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">&nbsp;</div><div style="float: left; text-align: left; width: 280px;"><input type='checkbox' name='stealth' value='yes' <?php if ($stealth == "yes") { print("checked"); } ?>><span style="font-size: 10pt;">Stealth mode. Hide from public listing.</span></div></div>
+		<div style="clear: both; padding-top: 5px;"><div style="float: left; width: 7em; text-align: left;">&nbsp;</div><div style="float: left; text-align: left; width: 280px;"><input type='checkbox' name='hide_create_page' value='yes' <?php if ($hide_create_page == "yes") { print("checked"); } ?>><span style="font-size: 10pt;">Hide new pages<br>(manually append '/create' to make new URLs).</span></div></div>
 		<?php } // end if ?>
 		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Attachment</div>
 			<div style="float: left; text-align: left; width: 320px;">
@@ -131,7 +138,7 @@ else {
 	}
 	
 	$_SESSION['secret_key'] = $secret_key; // set session
-	edit_domain_page($domain, $page, $content, $stealth, $filename, $filesize);	
+	edit_domain_page($domain, $page, $content, $stealth, $filename, $filesize, $hide_create_page);	
 ?>
 Your page <a href="http://<?php print($domain.$page);?>"><?php print($domain.$page);?></a> has been saved.
 <?

@@ -37,6 +37,11 @@ ADD  `file_size` INT NULL ,
 ADD  `attachment_limit` INT NULL;
 */
 
+// add option to hide create page
+/*ALTER TABLE `sites` ADD `hide_create_page` INT NOT NULL DEFAULT '0',
+ADD INDEX ( `hide_create_page` )*/
+
+
 // nginx rewrite config
 /*
 # Rewrite urls
@@ -186,6 +191,19 @@ function servePage($domain, $page)
 		include("yds_lib/remove_page.php");
 		return;
 	}
+
+	// create page
+	if (preg_match("/\/create$/i", $page))
+	{
+		$page = strtolower(preg_replace("/\/create$/i", "", $page));
+		if ($page == "") { $page = "/"; } // rewrite root page to /
+		if (page_exists($domain, $page)) { 
+			include("yds_lib/edit_page.php");
+		} else {
+			include("yds_lib/new_page.php");
+		}
+		return;
+	}
 	
 	// check if it's a download page
 	// file attachment
@@ -217,12 +235,18 @@ function servePage($domain, $page)
 		$parts = explode(":", $root_content);
 		$root_content = "#YOODOOS_CLONE:".$parts[1]."#";
 	}
+
 	
 	// new page and domain not cloned
 	if ((strpos($root_content, "#YOODOOS_CLONE:") !== 0) && (!page_exists($domain, $page))) {
 		// new page
-		include("yds_lib/new_page.php");	
+		if (!hide_create_page($domain)) { 
+			include("yds_lib/new_page.php");
+		} else {
+			print("<p>Page not found.</p>");
+		}
 		return;
+		
 	}
 	
 	// default page
