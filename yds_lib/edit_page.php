@@ -10,8 +10,14 @@ mysql_select_db($dbname);
 
 // domain
 $domain = strtolower($_SERVER["HTTP_HOST"]);
-$request_uri_parts = explode("?", $_SERVER["REQUEST_URI"]);
-$page = strtolower(preg_replace("/\/edit.*?$/i", "", $request_uri_parts[0])); // ie: /foobar/edit?id=1 will return /foobar
+// check for #! escaped_fragment URL and if so serve it as a page
+// see http://code.google.com/web/ajaxcrawling/docs/faq.html
+if (strpos($_SERVER["REQUEST_URI"], "?_escaped_fragment_=")) {
+	$page = strtolower(preg_replace("/\/edit.*?$/i", "", $_SERVER["REQUEST_URI"])); // ie: /foobar/edit?id=1 will return /foobar
+} else {
+	$request_uri_parts = explode("?", $_SERVER["REQUEST_URI"]);
+	$page = strtolower(preg_replace("/\/edit.*?$/i", "", $request_uri_parts[0])); // ie: /foobar/edit?id=1 will return /foobar
+}
 if ($page == "") { $page = "/"; } // rewrite root page to /
 
 // see if domain exists yet
