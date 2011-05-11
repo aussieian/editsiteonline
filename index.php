@@ -73,7 +73,13 @@ mysql_select_db($dbname);
 // domain
 $domain = strtolower($_SERVER["HTTP_HOST"]);
 $request_uri_parts = explode("?", $_SERVER["REQUEST_URI"]);
-$page = strtolower($request_uri_parts[0]); // get first part ie: /foobar?id=1 will return /foobar
+// check for #! escaped_fragment URL and if so serve it as a page
+// see http://code.google.com/web/ajaxcrawling/docs/faq.html
+if (strpos($_SERVER["REQUEST_URI"], "?_escaped_fragment_=")) { 
+	$page = $_SERVER["REQUEST_URI"];
+} else { 
+	$page = strtolower($request_uri_parts[0]); // get first part ie: /foobar?id=1 will return /foobar
+}
 $page = rtrim($page,"/"); // remove trailing slash
 if ($page == "") { $page = "/"; } // rewrite root page to /
 $insert_page_domain = "";
