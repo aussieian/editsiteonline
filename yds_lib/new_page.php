@@ -31,7 +31,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 		<div style="padding-bottom: 35px; font-size: 22pt;">Create your page.</div>
 		<div style="padding-left: 50px; clear: both;"><div style="float: left; width: 7em; text-align: left;">Page URL</div><div style="float: left; text-align: left;"><a href="http://<?php print($domain.$page);?>"><?php print($domain.$page);?></a><br><span style="font-size: 10pt;">The URL of this page</span></div></div>
 		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Secret key</div><div style="float: left; text-align: left; width: 280px;"><input type='text' name='secret_key' value="<?php print($secret_key);?>"><br><span style="font-size: 10pt;"><?php if (($real_key != $secret_key) && ($_POST["content"] != "")) { print ("<span style='color: #cc2a41;'>Wrong key!</span> (<a style='color: #cc2a41;' href='/edit/forgot_key'>email key to domain owner</a>)</span>"); } else { print("Enter your secret key."); } ?></span><br></div></div>
-		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Attachment</div>
+		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Attachment<br><span style='font-size: 10pt;'>(will override HTML)</span></div>
 			<div style="float: left; text-align: left; width: 280px;">
 				<input id="file_upload" name="file_upload" type="file" />
 				<input id="file_upload_filename" name="file_upload_filename" type="hidden" value="<?php print($filename);?>">
@@ -41,7 +41,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 				<br><div id="attachment_quota"><?php if (domain_is_over_quota($domain)) { print("<span style='color: red;'>Over Quota :(</span>"); } else { print("Quota: "); }?> You are using <?php print(round((get_domain_attachments_size($domain)/1000), 1)); ?>MB of <?php print(round((get_domain_attachments_limit($domain)/1000), 1)); ?>MB <br>(<a target="_blank" style='color: #fff;' href="http://yoodoos.com/#donate">Donate</a> to get more quota.)</div>
 			</div>
 		</div>
-		<div style="clear: both; padding-top: 15px; text-align: left;">Page HTML<br><span style='font-size: smaller;'>(Attachment will override HTML)</span><br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
+		<div style="clear: both; padding-top: 15px; text-align: left;">Page HTML<br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
 		</div>
 		<div style="padding-left: 50px; clear: both; padding-top: 15px;"><input type='submit' style="font-size: 12pt; color: #fff;" value='create page &raquo;' class="button orange"></div>

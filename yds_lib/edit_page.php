@@ -81,7 +81,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">&nbsp;</div><div style="float: left; text-align: left; width: 280px;"><input type='checkbox' name='stealth' value='yes' <?php if ($stealth == "yes") { print("checked"); } ?>><span style="font-size: 10pt;">Stealth mode. Hide from public listing.</span></div></div>
 		<div style="clear: both; padding-top: 5px;"><div style="float: left; width: 7em; text-align: left;">&nbsp;</div><div style="float: left; text-align: left; width: 280px;"><input type='checkbox' name='hide_create_page' value='yes' <?php if ($hide_create_page == "yes") { print("checked"); } ?>><span style="font-size: 10pt;">Hide new pages<br>(manually append '/create' to make new URLs).</span></div></div>
 		<?php } // end if ?>
-		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Attachment</div>
+		<div style="clear: both; padding-top: 15px;"><div style="float: left; width: 7em; text-align: left;">Attachment<br><span style='font-size: 10pt;'>(will override HTML)</span></div>
 			<div style="float: left; text-align: left; width: 320px;">
 				<input id="file_upload" name="file_upload" type="file" />
 				<input id="file_upload_filename" name="file_upload_filename" type="hidden" value="<?php print($filename);?>">
@@ -92,7 +92,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 				<br><div id="attachment_quota"><?php if (domain_is_over_quota($domain)) { print("<span style='color: red;'>Over Quota :( </span>"); } else { print("Quota: "); }?> You are using <?php print(round((get_domain_attachments_size($domain)/1000), 1)); ?>MB of <?php print(round((get_domain_attachments_limit($domain)/1000), 1)); ?>MB <br>(<a target="_blank" style='color: #fff;' href="http://yoodoos.com/#donate">Donate</a> to get more quota.)</div>
 			</div>
 		</div>
-		<div style="clear: both; padding-top: 15px; text-align: left;">Page HTML<span style="font-size: 10pt;"><?php if (get_page_backup($domain, $page) != "") { ?><a style="color: #00A0B0;" href="http://<?php print($domain.$page."/backup");?>">previous version</a></span><? } ?><br><span style='font-size: smaller;'>(Attachment will override HTML)</span><br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
+		<div style="clear: both; padding-top: 15px; text-align: left;">Page HTML<span style="font-size: 10pt;"><?php if (get_page_backup($domain, $page) != "") { ?><a style="color: #00A0B0;" href="http://<?php print($domain.$page."/backup");?>">previous version</a></span><? } ?><br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
 		Tips:
 		<ul style="margin-top: 0.5em;">
