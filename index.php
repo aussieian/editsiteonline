@@ -37,6 +37,11 @@ ADD  `file_size` INT NULL ,
 ADD  `attachment_limit` INT NULL;
 */
 
+// add option to hide create page
+/*ALTER TABLE `sites` ADD `hide_create_page` INT NOT NULL DEFAULT '0',
+ADD INDEX ( `hide_create_page` )*/
+
+
 // nginx rewrite config
 /*
 # Rewrite urls
@@ -72,8 +77,14 @@ mysql_select_db($dbname);
 
 // domain
 $domain = strtolower($_SERVER["HTTP_HOST"]);
-$request_uri_parts = explode("?", $_SERVER["REQUEST_URI"]);
-$page = strtolower($request_uri_parts[0]); // get first part ie: /foobar?id=1 will return /foobar
+// check for #! escaped_fragment URL and if so serve it as a page
+// see http://code.google.com/web/ajaxcrawling/docs/faq.html
+if (strpos($_SERVER["REQUEST_URI"], "?_escaped_fragment_=")) { 
+	$page = $_SERVER["REQUEST_URI"];
+} else { 
+	$request_uri_parts = explode("?", $_SERVER["REQUEST_URI"]);
+	$page = strtolower($request_uri_parts[0]); // get first part ie: /foobar?id=1 will return /foobar
+}
 $page = rtrim($page,"/"); // remove trailing slash
 if ($page == "") { $page = "/"; } // rewrite root page to /
 $insert_page_domain = "";
@@ -88,17 +99,41 @@ function serveAttachment($domain, $page, $download=false)
 	$finfo = finfo_open(FILEINFO_MIME_TYPE); // return mime type ala mimetype extension
 	$mimetype = finfo_file($finfo, $filepath);
 	$lastmodified = gmdate("D, d M Y H:i:s", filemtime($filepath));
-	header("Last-Modified: " . $lastmodified . " GMT");
 	if (strstr($filename, ".htm")) {
 		$mimetype = "text/html"; // for some reason finfo returns text/plain for .html
 	}
 	finfo_close($finfo);
+
+	// send headers
+	caching_headers($filepath, filemtime($filepath));
 	header("Content-Length: " . $filesize);
 	header("Content-Type: " . $mimetype);
 	if ($download) {
 		header('Content-Disposition: attachment; filename="'.$filename.'"');
 	}
 	readfile($filepath);
+}
+
+// see http://stackoverflow.com/questions/2000715/answering-http-if-modified-since-and-http-if-none-match-in-php
+function caching_headers($file, $timestamp)
+{
+	$gmt_mtime = gmdate('r', $timestamp);
+	header('ETag: "'.md5($timestamp.$file).'"');
+
+	if(isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) || isset($_SERVER['HTTP_IF_NONE_MATCH'])) {
+		if ($_SERVER['HTTP_IF_MODIFIED_SINCE'] == $gmt_mtime || str_replace('"', '', stripslashes($_SERVER['HTTP_IF_NONE_MATCH'])) == md5($timestamp.$file)) {
+		header('HTTP/1.1 304 Not Modified');
+		exit();
+		}
+	}
+
+	header('Last-Modified: '.$gmt_mtime);
+	header('Cache-Control: public');
+	header('Pragma: public'); // ianc
+
+	// http://stackoverflow.com/questions/1385964/how-to-get-the-browser-to-cache-images-with-php
+	header('Cache-control: public, max-age='.(60*60*24*365));
+	header('Expires: '.gmdate(DATE_RFC1123,time()+60*60*24*365));
 }
 
 // hostname switching
@@ -156,6 +191,19 @@ function servePage($domain, $page)
 		include("yds_lib/remove_page.php");
 		return;
 	}
+
+	// create page
+	if (preg_match("/\/create$/i", $page))
+	{
+		$page = strtolower(preg_replace("/\/create$/i", "", $page));
+		if ($page == "") { $page = "/"; } // rewrite root page to /
+		if (page_exists($domain, $page)) { 
+			include("yds_lib/edit_page.php");
+		} else {
+			include("yds_lib/new_page.php");
+		}
+		return;
+	}
 	
 	// check if it's a download page
 	// file attachment
@@ -187,12 +235,18 @@ function servePage($domain, $page)
 		$parts = explode(":", $root_content);
 		$root_content = "#YOODOOS_CLONE:".$parts[1]."#";
 	}
+
 	
 	// new page and domain not cloned
 	if ((strpos($root_content, "#YOODOOS_CLONE:") !== 0) && (!page_exists($domain, $page))) {
 		// new page
-		include("yds_lib/new_page.php");	
+		if (!hide_create_page($domain)) { 
+			include("yds_lib/new_page.php");
+		} else {
+			print("<p>Page not found.</p>");
+		}
 		return;
+		
 	}
 	
 	// default page
@@ -241,7 +295,7 @@ function servePage($domain, $page)
 	
 	// insert page templates
 	$insert_page_domain = $domain;
-	$content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $content, 10);
+	$content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $content, 16);
 	
 	// serve content
 	update_view_count($domain, $page);

@@ -102,7 +102,7 @@ EOT;
 	mysql_query($SQL);
 }
 
-function edit_domain_page($domain, $page, $content, $stealth="no", $filename="", $filesize=0)
+function edit_domain_page($domain, $page, $content, $stealth="no", $filename="", $filesize=0, $hide_create_page=0)
 {
 	$domain_escaped = mysql_real_escape_string($domain);
 	$page_escaped = mysql_real_escape_string($page);
@@ -119,13 +119,20 @@ function edit_domain_page($domain, $page, $content, $stealth="no", $filename="",
 		$public_mode_escaped = 0;
 	} 
 
+	$hide_create_page_escaped = 0;
+	if ($hide_create_page == "yes")
+	{
+		$hide_create_page_escaped = 1;
+	} 
+
 $SQL = <<<EOT
 	UPDATE  `yoodoos`.`sites` 
 	SET `content_backup` =  `content`,
 	`public_mode` = $public_mode_escaped,
 	`content` = '$content_escaped',
 	`file_name` = '$filename_escaped',
-	`file_size` = $filesize
+	`file_size` = $filesize,
+	`hide_create_page` = $hide_create_page_escaped
 	WHERE  `sites`.`domain` LIKE '$domain_escaped' AND `page` LIKE '$page_escaped';
 EOT;
 	mysql_query($SQL);	
@@ -147,6 +154,15 @@ function is_public_domain($domain)
 	$result = mysql_query($SQL);
 	$row = mysql_fetch_assoc($result); 
 	return ($row['public_mode'] == 1);
+}
+
+function hide_create_page($domain)
+{
+	// get domain id
+	$SQL = "select hide_create_page from sites where domain like '".mysql_real_escape_string($domain)."';";
+	$result = mysql_query($SQL);
+	$row = mysql_fetch_assoc($result); 
+	return ($row['hide_create_page'] == 1);
 }
 
 function get_page_filename($domain, $page)
