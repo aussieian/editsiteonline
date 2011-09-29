@@ -4,8 +4,8 @@
 	$email = $_POST['email'];
 	$comments = $_POST['comments'];
 	
-	$site_owners_email = 'caffeinegfx@gmail.com'; // Replace this with your own email address
-	$site_owners_name = 'Your Name'; // replace with your name
+	$site_owners_email = 'ian@insight4.com'; // Replace this with your own email address
+	$site_owners_name = 'Ian'; // replace with your name
 		
 	if (strlen($name) < 2) {
 		$error['name'] = "Please enter your name";	
@@ -24,11 +24,11 @@
 		require_once('phpMailer/class.phpmailer.php');
 		$mail = new PHPMailer();
 		
-		$mail->From = $email;
-		$mail->FromName = $name;
-		$mail->Subject = "Domain Request From $name";
+		$mail->From = "webmaster@yoodoos.com"; //$email;
+		$mail->FromName = "Yoodoos";
+		$mail->Subject = "Domain Request From $email (" . $_SERVER["REMOTE_ADDR"] . ")";
 		$mail->AddAddress($site_owners_email, $site_owners_name);
-		$mail->Body = $comments;
+		$mail->Body = "name: " . $name . "\n" . "email: " . $email . "\ncomments: " . $comments . "\nip: " . $_SERVER["REMOTE_ADDR"] . "\nbrowswer: " . $_SERVER["HTTP_USER_AGENT"];
 			
 		$mail->Send();
 		
