@@ -37,7 +37,11 @@
 	<td valign="top">
 	<ul class="intro">
 	<?php
-	foreach (get_recent_yoodoos_domains(20) as $domain) { 
+	numdisplay = 20;
+	if (array_key_exists("hidden", $_GET)) {
+		numdisplay = 1000;
+	}
+	foreach (get_recent_yoodoos_domains(numdisplay) as $domain) { 
 		print('<li class="intro"><a href="http://'.$domain.'" target="_blank">'.$domain.'</a>');
 	}
 	?>
