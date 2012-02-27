@@ -4,8 +4,8 @@
 error_reporting(E_ERROR);
 
 // db config
-$username = "root";
-$password = "root";
+$username = "editsiteonline";
+$password = "editsite0nline";
 //$password = "coluzzi";
 $hostname = "localhost";
 $dbname = 'editsiteonline';
