@@ -96,8 +96,8 @@ if (( $real_key != $secret_key) || ($content == ""))
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
 		Tips:
 		<ul style="margin-top: 0.5em;">
-			<li>Use #editsiteonline_CLONE:domainname# to clone a editsiteonline hosted domain
-			<li>Use #editsiteonline_PAGE:/page_url# to insert the contents of a page (useful for templates)
+			<li>Use #YOODOOS_CLONE:domainname# to clone a editsiteonline hosted domain
+			<li>Use #YOODOOS_PAGE:/page_url# to insert the contents of a page (useful for templates)
 			<li>To create a new page, just type the page URL into your browser.
 			<li>To download an attachment, append '/download' to the end of the URL.
 		</ul>
