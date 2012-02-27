@@ -212,6 +212,16 @@ function servePage($domain, $page)
 	$root_content = get_page_content($domain, "/");
 	$content = get_page_content($domain, $page);
 	
+	// 301 redirect
+	if (strpos($root_content, "#YOODOOS_301:") === 0) {
+		preg_match("/#YOODOOS_301:(.*)#/i", $root_content, $regex_matches);
+		// clone domain 
+		$redirect_to = $regex_matches[1];
+		header("HTTP/1.1 301 Moved Permanently");
+		header("Location: http://" . $redirect_to . "/" . $page);
+		die();
+	}
+	
 	// compatibility fix for old "clone:" syntax
 	// ie: "clone:somedomain.com"
 	if (strpos($root_content, "clone:") === 0) {

@@ -98,6 +98,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 		<ul style="margin-top: 0.5em;">
 			<li>Use #YOODOOS_CLONE:domainname# to clone a editsiteonline hosted domain
 			<li>Use #YOODOOS_PAGE:/page_url# to insert the contents of a page (useful for templates)
+			<li>Use #YOODOOS_301:domainname# to redirect all URLs to the new site
 			<li>To create a new page, just type the page URL into your browser.
 			<li>To download an attachment, append '/download' to the end of the URL.
 		</ul>
