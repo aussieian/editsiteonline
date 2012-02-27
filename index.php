@@ -216,12 +216,12 @@ function servePage($domain, $page)
 	// ie: "clone:somedomain.com"
 	if (strpos($root_content, "clone:") === 0) {
 		$parts = explode(":", $root_content);
-		$root_content = "#editsiteonline_CLONE:".$parts[1]."#";
+		$root_content = "#YOODOOS_CLONE:".$parts[1]."#";
 	}
 
 	
 	// new page and domain not cloned
-	if ((strpos($root_content, "#editsiteonline_CLONE:") !== 0) && (!page_exists($domain, $page))) {
+	if ((strpos($root_content, "#YOODOOS_CLONE:") !== 0) && (!page_exists($domain, $page))) {
 		// new page
 		if (!hide_create_page($domain)) { 
 			include("yds_lib/new_page.php");
@@ -239,8 +239,8 @@ function servePage($domain, $page)
 	}
 		
 	// cloned page
-	if (strpos($root_content, "#editsiteonline_CLONE:") === 0) {
-		preg_match("/#editsiteonline_CLONE:(.*)#/i", $root_content, $regex_matches);
+	if (strpos($root_content, "#YOODOOS_CLONE:") === 0) {
+		preg_match("/#YOODOOS_CLONE:(.*)#/i", $root_content, $regex_matches);
 		// clone domain 
 		$clone_domain = $regex_matches[1];
 		if (domain_exists($clone_domain)) {
@@ -255,7 +255,7 @@ function servePage($domain, $page)
 					$clone_content = get_page_content($clone_domain, $page);
 					// insert page templates
 					$insert_page_domain = $clone_domain;
-					$clone_content = preg_replace_callback("/#editsiteonline_PAGE:.*?#/i", "insertPage", $clone_content, 10);
+					$clone_content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $clone_content, 10);
 					// increase page count (give count to clone domain)
 					update_view_count($clone_domain, $page);
 					header("Content-Type: " . getMimeType($page));
@@ -278,7 +278,7 @@ function servePage($domain, $page)
 	
 	// insert page templates
 	$insert_page_domain = $domain;
-	$content = preg_replace_callback("/#editsiteonline_PAGE:.*?#/i", "insertPage", $content, 16);
+	$content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $content, 16);
 	
 	// serve content
 	update_view_count($domain, $page);
@@ -290,7 +290,7 @@ function servePage($domain, $page)
 function insertPage($matches)
 {
 	global $insert_page_domain;
-	preg_match("/#editsiteonline_PAGE:(.*)#/i", $matches[0], $regex_matches);
+	preg_match("/#YOODOOS_PAGE:(.*)#/i", $matches[0], $regex_matches);
 	return get_page_content($insert_page_domain, $regex_matches[1]);
 }
 
