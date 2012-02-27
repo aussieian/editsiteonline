@@ -218,7 +218,11 @@ function servePage($domain, $page)
 		// clone domain 
 		$redirect_to = $regex_matches[1];
 		header("HTTP/1.1 301 Moved Permanently");
-		header("Location: http://" . $redirect_to . "/" . $page);
+		if ($page == "/") {
+			header("Location: http://" . $redirect_to );
+		} else {
+			header("Location: http://" . $redirect_to . "/" . $page);
+		}
 		die();
 	}
 	
