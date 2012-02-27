@@ -38,7 +38,7 @@ if (( $real_key != $secret_key) || ($content == ""))
 				<input id="file_upload_filesize" name="file_upload_filesize" type="hidden" value="<?php print($filesize);?>">
 				<a style="font-size: 10pt;" href="javascript:$('#file_upload').uploadifyUpload();">Upload Files</a><br>
 				<span style="font-size: 10pt;" id="file_upload_message"><?php if($filename != "") { print("'".$filename."' (".round(($filesize/1024), 0)." KB)"); }?></span>
-				<br><div id="attachment_quota"><?php if (domain_is_over_quota($domain)) { print("<span style='color: red;'>Over Quota :(</span>"); } else { print("Quota: "); }?> You are using <?php print(round((get_domain_attachments_size($domain)/1000), 1)); ?>MB of <?php print(round((get_domain_attachments_limit($domain)/1000), 1)); ?>MB <br>(<a target="_blank" style='color: #fff;' href="http://yoodoos.com/#donate">Donate</a> to get more quota.)</div>
+				<br><div id="attachment_quota"><?php if (domain_is_over_quota($domain)) { print("<span style='color: red;'>Over Quota :(</span>"); } else { print("Quota: "); }?> You are using <?php print(round((get_domain_attachments_size($domain)/1000), 1)); ?>MB of <?php print(round((get_domain_attachments_limit($domain)/1000), 1)); ?>MB <br>(<a target="_blank" style='color: #fff;' href="http://editsiteonline.com/#donate">Donate</a> to get more quota.)</div>
 			</div>
 		</div>
 		<div style="clear: both; padding-top: 15px; text-align: left;">Page HTML<br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>

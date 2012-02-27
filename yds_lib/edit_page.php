@@ -89,15 +89,15 @@ if (( $real_key != $secret_key) || ($content == ""))
 				<a style="font-size: 10pt;" href="javascript:$('#file_upload').uploadifyUpload();">Upload Files</a><br>
 				<span style="font-size: 10pt;" id="file_upload_message"><?php if($filename != "") { print("'".$filename."' (".round(($filesize/1024), 0)." KB)"); }?></span>
 				<?php if($filename != "") { ?><br><input id="file_upload_remove" name="file_upload_remove" type="checkbox" value="yes"><span style="font-size: 10pt;">Remove attachment</span><? } ?>
-				<br><div id="attachment_quota"><?php if (domain_is_over_quota($domain)) { print("<span style='color: red;'>Over Quota :( </span>"); } else { print("Quota: "); }?> You are using <?php print(round((get_domain_attachments_size($domain)/1000), 1)); ?>MB of <?php print(round((get_domain_attachments_limit($domain)/1000), 1)); ?>MB <br>(<a target="_blank" style='color: #fff;' href="http://yoodoos.com/#donate">Donate</a> to get more quota.)</div>
+				<br><div id="attachment_quota"><?php if (domain_is_over_quota($domain)) { print("<span style='color: red;'>Over Quota :( </span>"); } else { print("Quota: "); }?> You are using <?php print(round((get_domain_attachments_size($domain)/1000), 1)); ?>MB of <?php print(round((get_domain_attachments_limit($domain)/1000), 1)); ?>MB <br>(<a target="_blank" style='color: #fff;' href="http://editsiteonline.com/#donate">Donate</a> to get more quota.)</div>
 			</div>
 		</div>
 		<div style="clear: both; padding-top: 15px; text-align: left;">Page HTML<span style="font-size: 10pt;"><?php if (get_page_backup($domain, $page) != "") { ?><a style="color: #00A0B0;" href="http://<?php print($domain.$page."/backup");?>">previous version</a></span><? } ?><br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
 		Tips:
 		<ul style="margin-top: 0.5em;">
-			<li>Use #YOODOOS_CLONE:domainname# to clone a Yoodoos hosted domain
-			<li>Use #YOODOOS_PAGE:/page_url# to insert the contents of a page (useful for templates)
+			<li>Use #editsiteonline_CLONE:domainname# to clone a editsiteonline hosted domain
+			<li>Use #editsiteonline_PAGE:/page_url# to insert the contents of a page (useful for templates)
 			<li>To create a new page, just type the page URL into your browser.
 			<li>To download an attachment, append '/download' to the end of the URL.
 		</ul>

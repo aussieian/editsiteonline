@@ -38,7 +38,7 @@ function create_domain_page($domain, $page, $content, $secret_key, $owner_email,
 	}
 
 	$SQL = <<<EOT
-	INSERT INTO  `yoodoos`.`sites` (
+	INSERT INTO  `editsiteonline`.`sites` (
 	`id` ,
 	`domain` ,
 	`page` , 
@@ -76,7 +76,7 @@ function create_domain($domain, $content, $secret_key, $owner_email, $attachment
 	$owner_email_escaped = mysql_real_escape_string($owner_email);
 
 	$SQL = <<<EOT
-	INSERT INTO  `yoodoos`.`sites` (
+	INSERT INTO  `editsiteonline`.`sites` (
 	`id` ,
 	`domain` ,
 	`page` , 
@@ -126,7 +126,7 @@ function edit_domain_page($domain, $page, $content, $stealth="no", $filename="",
 	} 
 
 $SQL = <<<EOT
-	UPDATE  `yoodoos`.`sites` 
+	UPDATE  `editsiteonline`.`sites` 
 	SET `content_backup` =  `content`,
 	`public_mode` = $public_mode_escaped,
 	`content` = '$content_escaped',
@@ -232,7 +232,7 @@ function email_domain_key($domain)
 	$email = get_domain_email($domain);
 	
 	// email owner of domain with the key
-	mail( $email, "Yoodoos Secret Key", "Hi, \n\nyour secret key for " . $domain . " is: \n\n" . $key . "\n\n- Yooodoos.com", "From: " . $mail_from );
+	mail( $email, "editsiteonline Secret Key", "Hi, \n\nyour secret key for " . $domain . " is: \n\n" . $key . "\n\n- Yooodoos.com", "From: " . $mail_from );
 }
 
 function get_page_content($domain, $page)
@@ -257,7 +257,7 @@ function get_page_backup($domain, $page)
 function get_recent_domains($limit)
 {
 	// show the page for the domain
-	$SQL = "select domain from sites where content not like '\%default\%' and page like '/' and public_mode = 1 and domain not like '%yoodoos.com%' order by id desc limit ".$limit.";";
+	$SQL = "select domain from sites where content not like '\%default\%' and page like '/' and public_mode = 1 and domain not like '%editsiteonline.com%' order by id desc limit ".$limit.";";
 	$result = mysql_query($SQL);
 	$recent_domains = array();
 	while ($row = mysql_fetch_assoc($result)) {
@@ -266,10 +266,10 @@ function get_recent_domains($limit)
 	return $recent_domains;
 }
 
-function get_recent_yoodoos_domains($limit)
+function get_recent_editsiteonline_domains($limit)
 {
 	// show the page for the domain
-	$SQL = "select domain from sites where content not like '\%default\%' and page like '/' and public_mode = 1 and domain like '%yoodoos.com%' order by id desc limit ".$limit.";";
+	$SQL = "select domain from sites where content not like '\%default\%' and page like '/' and public_mode = 1 and domain like '%editsiteonline.com%' order by id desc limit ".$limit.";";
 	$result = mysql_query($SQL);
 	$recent_domains = array();
 	while ($row = mysql_fetch_assoc($result)) {

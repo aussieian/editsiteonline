@@ -24,8 +24,8 @@
 		require_once('phpMailer/class.phpmailer.php');
 		$mail = new PHPMailer();
 		
-		$mail->From = "webmaster@yoodoos.com"; //$email;
-		$mail->FromName = "Yoodoos";
+		$mail->From = "webmaster@editsiteonline.com"; //$email;
+		$mail->FromName = "editsiteonline";
 		$mail->Subject = "Domain Request From $email (" . $_SERVER["REMOTE_ADDR"] . ")";
 		$mail->AddAddress($site_owners_email, $site_owners_name);
 		$mail->Body = "name: " . $name . "\n" . "email: " . $email . "\ncomments: " . $comments . "\nip: " . $_SERVER["REMOTE_ADDR"] . "\nbrowswer: " . $_SERVER["HTTP_USER_AGENT"];

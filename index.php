@@ -4,42 +4,25 @@
 /* CREATE TABLE `sites` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `domain` varchar(255) NOT NULL,
+  `page` varchar(512) DEFAULT NULL,
   `content` longtext NOT NULL,
   `content_backup` longtext,
   `secret_key` varchar(50) NOT NULL,
   `owner_email` varchar(255) NOT NULL,
   `last_update` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `public_mode` int(11) NOT NULL DEFAULT '1',
+  `view_count` int(11) NOT NULL,
+  `file_name` varchar(255) DEFAULT NULL,
+  `file_size` int(11) DEFAULT NULL,
+  `attachment_limit` int(11) DEFAULT NULL,
+  `hide_create_page` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `domain_2` (`domain`),
-  KEY `domain` (`domain`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
-*/
-
-// patches
-/*ALTER TABLE `sites` ADD `is_stealth` INT NOT NULL DEFAULT '0',
-ADD INDEX ( `is_stealth` )*/
-/*ALTER TABLE `sites` CHANGE `is_stealth` `public_mode` INT( 11 ) NOT NULL DEFAULT '1'*/
-
-// add path to domains
-/*
-ALTER TABLE  `sites` ADD  `page` VARCHAR( 512 ) NULL DEFAULT NULL AFTER  `domain` ,
-ADD INDEX (  `page` );
-UPDATE sites SET page = '/';
-ALTER TABLE  `sites` DROP INDEX  `domain_2`;
-ALTER TABLE  `sites` ADD INDEX (  `domain` ,  `page` );
-ALTER TABLE  `sites` ADD  `view_count` INT NOT NULL
-*/
-
-// add file attachments
-/*
-ALTER TABLE  `sites` ADD  `file_name` VARCHAR( 255 ) NULL ,
-ADD  `file_size` INT NULL ,
-ADD  `attachment_limit` INT NULL;
-*/
-
-// add option to hide create page
-/*ALTER TABLE `sites` ADD `hide_create_page` INT NOT NULL DEFAULT '0',
-ADD INDEX ( `hide_create_page` )*/
+  KEY `domain` (`domain`),
+  KEY `is_stealth` (`public_mode`),
+  KEY `page` (`page`),
+  KEY `domain_2` (`domain`,`page`),
+  KEY `hide_create_page` (`hide_create_page`)
+) ENGINE=MyISAM AUTO_INCREMENT=1333 DEFAULT CHARSET=latin1; */
 
 
 // nginx rewrite config
@@ -142,10 +125,10 @@ function servePage($domain, $page)
 	global $host_names;
 	global $insert_page_domain;
 	
-	// check if its a yoodoos page
+	// check if its a editsiteonline page
 	if (in_array($domain, $host_names)) {
-		// host yoodoos
-		include("html/yoodoos.html");
+		// host editsiteonline
+		include("html/editsiteonline.html");
 		return;
 	}
 	
@@ -233,12 +216,12 @@ function servePage($domain, $page)
 	// ie: "clone:somedomain.com"
 	if (strpos($root_content, "clone:") === 0) {
 		$parts = explode(":", $root_content);
-		$root_content = "#YOODOOS_CLONE:".$parts[1]."#";
+		$root_content = "#editsiteonline_CLONE:".$parts[1]."#";
 	}
 
 	
 	// new page and domain not cloned
-	if ((strpos($root_content, "#YOODOOS_CLONE:") !== 0) && (!page_exists($domain, $page))) {
+	if ((strpos($root_content, "#editsiteonline_CLONE:") !== 0) && (!page_exists($domain, $page))) {
 		// new page
 		if (!hide_create_page($domain)) { 
 			include("yds_lib/new_page.php");
@@ -256,8 +239,8 @@ function servePage($domain, $page)
 	}
 		
 	// cloned page
-	if (strpos($root_content, "#YOODOOS_CLONE:") === 0) {
-		preg_match("/#YOODOOS_CLONE:(.*)#/i", $root_content, $regex_matches);
+	if (strpos($root_content, "#editsiteonline_CLONE:") === 0) {
+		preg_match("/#editsiteonline_CLONE:(.*)#/i", $root_content, $regex_matches);
 		// clone domain 
 		$clone_domain = $regex_matches[1];
 		if (domain_exists($clone_domain)) {
@@ -272,7 +255,7 @@ function servePage($domain, $page)
 					$clone_content = get_page_content($clone_domain, $page);
 					// insert page templates
 					$insert_page_domain = $clone_domain;
-					$clone_content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $clone_content, 10);
+					$clone_content = preg_replace_callback("/#editsiteonline_PAGE:.*?#/i", "insertPage", $clone_content, 10);
 					// increase page count (give count to clone domain)
 					update_view_count($clone_domain, $page);
 					header("Content-Type: " . getMimeType($page));
@@ -280,7 +263,7 @@ function servePage($domain, $page)
 				}
 			}
 		} else {
-			print("Oops, can't clone domain '" . $clone_domain . $page . "' (not hosted on Yoodoos) <a href='/edit'>Edit page</a>");
+			print("Oops, can't clone domain '" . $clone_domain . $page . "' (not hosted on editsiteonline) <a href='/edit'>Edit page</a>");
 		}
 		return;
 	}
@@ -295,7 +278,7 @@ function servePage($domain, $page)
 	
 	// insert page templates
 	$insert_page_domain = $domain;
-	$content = preg_replace_callback("/#YOODOOS_PAGE:.*?#/i", "insertPage", $content, 16);
+	$content = preg_replace_callback("/#editsiteonline_PAGE:.*?#/i", "insertPage", $content, 16);
 	
 	// serve content
 	update_view_count($domain, $page);
@@ -307,7 +290,7 @@ function servePage($domain, $page)
 function insertPage($matches)
 {
 	global $insert_page_domain;
-	preg_match("/#YOODOOS_PAGE:(.*)#/i", $matches[0], $regex_matches);
+	preg_match("/#editsiteonline_PAGE:(.*)#/i", $matches[0], $regex_matches);
 	return get_page_content($insert_page_domain, $regex_matches[1]);
 }
 

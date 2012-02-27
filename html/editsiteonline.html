@@ -1,27 +1,38 @@
 <html>
 <head>
-	<title>Yoodoos.com - Super simple HTML page hosting</title>
+	<title>EditSiteOnline.com - Super simple HTML page hosting</title>
     <link type='text/css' href='/yds_stylesheet.css' rel='stylesheet' />
 </head>
 <body>
 	
 <div id="header">
-	<span class="red">&nbsp;Yoodoos<span style="font-size: 12pt;">.com&nbsp;<br></span></span>
+	<span class="red">&nbsp;EditSiteOnline<span style="font-size: 12pt;">.com&nbsp;<br></span></span>
 	<span style="font-size: 12pt;">Super simple HTML page hosting.</span><br>
 </div>
 
 <div id="intro">
-	Hi.<br><br>Yoodoos is a <span style="color: #CC2A41; background-color: #fff">free</span> service to host <span style="color: #CC2A41; background-color: #fff">HTML pages</span> or <span style="color: #CC2A41; background-color: #fff">files</span> on your domain or sub-domain.
-    <br><br><span style="font-size: 16pt;">Create pages simply by <span style="color: #CC2A41; background-color: #fff">entering the URL</span> of the page into your browser.</span>
+	Hi.<br><br>EditSiteOnline.com is a service to host <span style="color: #CC2A41; background-color: #fff">simple</span> web pages that you can <span style="color: #CC2A41; background-color: #fff">easily</span> edit <span style="color: #CC2A41; background-color: #fff">online</span>.
+	<br><br>
+	<span style="font-size: 16pt;">This service is <span style="color: #CC2A41; background-color: #fff">awesome</span> because you can...</span>
+    <ul>
+		<li><span style="font-size: 16pt;">Create pages simply by <span style="color: #CC2A41; background-color: #fff">entering the URL</span></span></li>
+    	<li><span style="font-size: 16pt;">Edit your pages <span style="color: #CC2A41; background-color: #fff">online</span> with HTML</span></li>
+		<li><span style="font-size: 16pt;">Create <span style="color: #CC2A41; background-color: #fff">templates</span> to make life easier</span></li>
+		<li><span style="font-size: 16pt;">Get set up with <span style="color: #CC2A41; background-color: #fff">no sign up</span>!</span></li>
+	</ul>
+	
+	<!--
 	<br><br><span style="font-size: 13pt;">How do I set it up?
-	<br>Just point your CNAME to <span style="color: #444;">hostme.yoodoos.com</span> or root A record to <span style="color: #444;">184.72.55.6</span>
+	<br>Just point your CNAME to <span style="color: #444;">editsiteonline.com</span> or root A record to <span style="color: #444;">49.156.17.170</span>
 	<div id='intro_subdomain'>Don't have a domain name?
-	<br>Make your own sub-domain at &nbsp;&nbsp;<input style='font-size: 12pt;' type='text' id='new_page' name='new_page' size='12'>.yoodoos.com <button class="button green" OnClick="window.location.href = 'http://' + document.getElementById('new_page').value + '.yoodoos.com';">&raquo; create page</button>
+	<br>Make your own sub-domain at &nbsp;&nbsp;<input style='font-size: 12pt;' type='text' id='new_page' name='new_page' size='12'>.editsiteonline.com <button class="button green" OnClick="window.location.href = 'http://' + document.getElementById('new_page').value + '.editsiteonline.com';">&raquo; create page</button>
 	</div>
 	<br><br>How do I edit my page?
 		<br>Once you've updated your DNS entries, just visit your address and append "/edit" to the URL. To keep the riff-raff out, you'll be asked to choose a secret key to save any changes.
-	<br><br><a name="donate"/></a>How can I increase my attachment quota?
-		<br>Tell <a href="http://twitter.com/aussie_ian">@aussie_ian</a> in 140 characters or less what you like about yoodoos.com.
+	-->
+	<span style="font-size: 16pt;">
+	<a name="donate"/></a>Cool, so how do I host my site here?
+		<br>This service is free to friends of <a href="http://twitter.com/aussie_ian">@aussie_ian</a>.
 	<div style="border-bottom: 1px solid #fff; padding-top: 15px; margin-bottom: 15px;"></div>
 	<span style="font-size: 16pt;">Recently added</span>
 	<table width="100%;" border="0" style="padding-top: 10px;">
@@ -41,7 +52,7 @@
 	if (array_key_exists("hidden", $_GET)) {
 		$numdisplay = 1000;
 	}
-	foreach (get_recent_yoodoos_domains($numdisplay) as $domain) { 
+	foreach (get_recent_editsiteonline_domains($numdisplay) as $domain) { 
 		print('<li class="intro"><a href="http://'.$domain.'" target="_blank">'.$domain.'</a>');
 	}
 	?>

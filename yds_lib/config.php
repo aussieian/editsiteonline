@@ -5,14 +5,14 @@ error_reporting(E_ERROR);
 
 // db config
 $username = "root";
-//$password = "root";
-$password = "coluzzi";
+$password = "root";
+//$password = "coluzzi";
 $hostname = "localhost";
-$dbname = 'yoodoos';
+$dbname = 'editsiteonline';
 
-$host_names = array("yoodoos.com", "dev.yoodoos.com", "www.yoodoos.com", "mail.yoodoos.com", "admin.yoodoos.com", "yhs.yoodoos.com", "hostme.yoodoos.com", "184.72.55.6", "localhost");
+$host_names = array("EditSiteOnline.com", "dev.EditSiteOnline.com", "www.EditSiteOnline.com", "mail.EditSiteOnline.com", "admin.EditSiteOnline.com", "yhs.EditSiteOnline.com", "hostme.EditSiteOnline.com", "184.72.55.6", "localhost", "49.156.17.170", "localhost.editsiteonline.com", "www.editsiteonline.com", "dev.editsiteonline.com", "admin.editsiteonline.com");
 
 // email
-$mail_from = "Yoodoos.com <noreply@yoodoos.com>";
+$mail_from = "editsiteonline.com <noreply@editsiteonline.com>";
 
 ?>
