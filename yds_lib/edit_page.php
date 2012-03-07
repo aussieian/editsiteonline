@@ -34,11 +34,29 @@ $real_key = get_domain_key($domain);
 $filename = stripslashes($_POST["file_upload_filename"]);
 $filesize = stripslashes($_POST["file_upload_filesize"]);
 $file_upload_remove = $_POST["file_upload_remove"];
+$save_action = $_POST["save_action"];
+
 
 // set secret key from session
 if ((!isset($_POST['secret_key'])) && isset($_SESSION['secret_key'])) { $secret_key = $_SESSION['secret_key']; }
 
-if (( $real_key != $secret_key) || ($content == ""))
+// save and edit
+if ($save_action == "save_edit") {
+	
+	// remove attachment?
+	if (($file_upload_remove == "yes") || (domain_is_over_quota($domain))) {
+		$filename = "";
+		$filesize = 0;
+	}
+	
+	$_SESSION['secret_key'] = $secret_key; // set session
+	edit_domain_page($domain, $page, $content, $stealth, $filename, $filesize, $hide_create_page);
+	
+}
+
+
+
+if (( $real_key != $secret_key) || ($content == "") || ($save_action == "save_edit"))
 {
 	// get the content if it was set to empty
 	if ($content == "") {
@@ -104,8 +122,12 @@ if (( $real_key != $secret_key) || ($content == ""))
 		</ul>
 		</div>
 		<div style="clear: both; padding-top: 15px;">
-			<input type='submit' style="font-size: 12pt; color: #fff;" value='save end keep editing page &raquo;' class="button orange">
-			<input type='submit' style="font-size: 12pt; color: #fff;" value='save and view page &raquo;' class="button orange">
+			<input type='hidden' name='save_action' id='save_action' value='save_edit'>
+			<?php if ($save_action == "save_edit") { ?>
+			<span style="font-size: 12pt;">Saved!</span><br>
+			<? }?>
+			<input type='submit' style="font-size: 12pt; color: #fff;" OnClick="$('#save_action').val('save_edit');" value='save end keep editing page &raquo;' class="button orange">
+			<input type='submit' style="font-size: 12pt; color: #fff;" OnClick="$('#save_action').val('save_view');" value='save and view page &raquo;' class="button orange">
 		</div>
 	</div>
 </form>
