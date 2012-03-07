@@ -127,7 +127,7 @@ if (( $real_key != $secret_key) || ($content == "") || ($save_action == "save_ed
 			<span style="font-size: 12pt;">Saved!</span><br>
 			<? }?>
 			<input type='submit' style="font-size: 12pt; color: #fff;" OnClick="$('#save_action').val('save_view');" value='save and view page &raquo;' class="button orange">
-			<input type='submit' style="font-size: 12pt; color: #fff;" OnClick="$('#save_action').val('save_edit');" value='save end keep editing page' class="button orange">
+			<input type='submit' style="font-size: 12pt; color: #fff;" OnClick="$('#save_action').val('save_edit');" value='save and keep editing page' class="button orange">
 		</div>
 	</div>
 </form>
