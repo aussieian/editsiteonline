@@ -41,7 +41,7 @@ $save_action = $_POST["save_action"];
 if ((!isset($_POST['secret_key'])) && isset($_SESSION['secret_key'])) { $secret_key = $_SESSION['secret_key']; }
 
 // save and edit
-if ($save_action == "save_edit") {
+if (($save_action == "save_edit") && ($real_key == $secret_key)) {
 	
 	// remove attachment?
 	if (($file_upload_remove == "yes") || (domain_is_over_quota($domain))) {
