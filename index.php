@@ -221,7 +221,7 @@ function servePage($domain, $page)
 		if ($page == "/") {
 			header("Location: http://" . $redirect_to );
 		} else {
-			header("Location: http://" . $redirect_to . "/" . $page);
+			header("Location: http://" . $redirect_to . $page);
 		}
 		die();
 	}
