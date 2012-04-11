@@ -60,7 +60,7 @@ if (( $real_key != $secret_key) || ($content == "") || ($save_action == "save_ed
 {
 	// get the content if it was set to empty
 	if ($content == "") {
-		$content = htmlentities(get_page_content($domain, $page));
+		$content = get_page_content($domain, $page);
 	}
 	
 	// check it's not default
@@ -110,7 +110,7 @@ if (( $real_key != $secret_key) || ($content == "") || ($save_action == "save_ed
 				<br><div id="attachment_quota"><?php if (domain_is_over_quota($domain)) { print("<span style='color: red;'>Over Quota :( </span>"); } else { print("Quota: "); }?> You are using <?php print(round((get_domain_attachments_size($domain)/1000), 1)); ?>MB of <?php print(round((get_domain_attachments_limit($domain)/1000), 1)); ?>MB <br>(<a target="_blank" style='color: #fff;' href="http://editsiteonline.com/#donate">Donate</a> to get more quota.)</div>
 			</div>
 		</div>
-		<div style="clear: both; padding-top: 15px; text-align: left;">Page HTML<span style="font-size: 10pt;"><?php if (get_page_backup($domain, $page) != "") { ?><a style="color: #00A0B0;" href="http://<?php print($domain.$page."/backup");?>">previous version</a></span><? } ?><br><textarea name='content' class="editcontent"><?php print($content);?></textarea></div>
+		<a name="page_html"><div style="clear: both; padding-top: 15px; text-align: left;">Page HTML<span style="font-size: 10pt;"><?php if (get_page_backup($domain, $page) != "") { ?><a style="color: #00A0B0;" href="http://<?php print($domain.$page."/backup");?>">previous version</a></span><? } ?><br><textarea name='content' class="editcontent"><?php print(htmlentities($content));?></textarea></div>
 		<div style="font-size: 10pt; text-align: left; padding-top: 10px;">
 		Tips:
 		<ul style="margin-top: 0.5em;">
